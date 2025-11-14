@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-
-import '../core/constants/app_colors.dart';
-import '../core/constants/app_text_styles.dart';
-import '../widgets/custom_text_field.dart';
-import '../widgets/divider_with_text.dart';
-import '../widgets/primary_button.dart';
-import '../widgets/secondary_button.dart';
-import 'password_screen.dart';
+import 'package:go_router/go_router.dart';
+import 'package:lexora/core/constants/app_colors.dart';
+import 'package:lexora/core/constants/app_text_styles.dart';
+import 'package:lexora/widgets/custom_text_field.dart';
+import 'package:lexora/widgets/divider_with_text.dart';
+import 'package:lexora/widgets/primary_button.dart';
+import 'package:lexora/widgets/secondary_button.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,7 +16,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
-  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -26,17 +24,25 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _handleContinue() {
-    if (_emailController.text.isEmpty) {
+    final email = _emailController.text.trim();
+
+    if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter your email')),
+      );
       return;
     }
 
-    // Navigate to password screen
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PasswordScreen(email: _emailController.text),
-      ),
-    );
+    // Basic email validation
+    if (!email.contains('@') || !email.contains('.')) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid email')),
+      );
+      return;
+    }
+
+    // Navigate to password screen using GoRouter
+    context.go('/auth?email=${Uri.encodeComponent(email)}');
   }
 
   @override
@@ -78,20 +84,23 @@ class _LoginScreenState extends State<LoginScreen> {
                             text: 'think',
                             style: AppTextStyles.h2.copyWith(
                               decoration: TextDecoration.underline,
+                              fontWeight: FontWeight.w200,
                             ),
                           ),
                           const TextSpan(text: ', '),
                           TextSpan(
                             text: 'plan',
                             style: AppTextStyles.h2.copyWith(
+                              fontWeight: FontWeight.w200,
                               decoration: TextDecoration.underline,
                             ),
                           ),
-                          const TextSpan(text: ', '),
+                          const TextSpan(text: ', and '),
                           TextSpan(
                             text: 'solve',
                             style: AppTextStyles.h2.copyWith(
                               decoration: TextDecoration.underline,
+                              fontWeight: FontWeight.w200,
                             ),
                           ),
                         ],
@@ -122,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     // Continue Button
                     PrimaryButton(
                       text: 'Continue',
-                      isLoading: _isLoading,
+                      isLoading: false,
                       onPressed: _handleContinue,
                     ),
 
@@ -183,8 +192,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
             ),
-
-            const SizedBox(height: 20),
           ],
         ),
       ),

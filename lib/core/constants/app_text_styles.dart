@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'app_colors.dart';
 
 class AppTextStyles {
@@ -14,6 +15,7 @@ class AppTextStyles {
     fontSize: 24,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
+    
   );
 
   // Body Text

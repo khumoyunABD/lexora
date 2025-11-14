@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:lexora/main.dart';
+import 'package:lexora/lexora_app.dart';
 
 void main() {
   testWidgets('Lexora app loads login screen', (WidgetTester tester) async {
