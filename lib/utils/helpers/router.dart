@@ -31,7 +31,7 @@ class AppRouter {
 
       // Allowing navigation to login and register page regardless of login status
       final bool isLoggingInOrRegistering =
-          state.uri.toString() == '/login' || state.uri.toString() == '/auth';
+          state.uri.path == '/login' || state.uri.path == '/auth';
 
       if (!isLoggedIn && !isLoggingInOrRegistering) {
         // Redirect to login if not logged in and trying to access other pages
@@ -40,8 +40,8 @@ class AppRouter {
       }
 
       if (isLoggedIn &&
-          (state.uri.toString() == '/login' ||
-              state.uri.toString() == '/auth')) {
+          (state.uri.path == '/login' ||
+              state.uri.path == '/auth')) {
         // Redirect to main navigation if logged in and trying to access login or register
         log('✅ User already logged in, redirecting from ${state.uri} to main navigation');
         return '/';
@@ -53,7 +53,7 @@ class AppRouter {
       // If there's an error checking login status, assume not logged in
       log('❌ Error in redirect logic: $e');
       final isLoggingInOrRegistering =
-          state.uri.toString() == '/login' || state.uri.toString() == '/auth';
+          state.uri.path == '/login' || state.uri.path == '/auth';
 
       if (!isLoggingInOrRegistering) {
         log('⚠️ Redirecting to login due to error');
