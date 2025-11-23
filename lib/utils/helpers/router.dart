@@ -7,7 +7,7 @@ import 'package:lexora/core/di/di.dart';
 import 'package:lexora/core/services/local_storage/local_storage_repository.dart';
 import 'package:lexora/features/auth/presentation/pages/login_screen.dart';
 import 'package:lexora/features/auth/presentation/pages/password_screen.dart';
-import 'package:lexora/features/user/presentation/pages/chat_screen.dart';
+import 'package:lexora/features/user/presentation/pages/chat_page.dart';
 
 abstract class PagePath {
   static const String home = '/';
@@ -40,8 +40,7 @@ class AppRouter {
       }
 
       if (isLoggedIn &&
-          (state.uri.path == '/login' ||
-              state.uri.path == '/auth')) {
+          (state.uri.path == '/login' || state.uri.path == '/auth')) {
         // Redirect to main navigation if logged in and trying to access login or register
         log('✅ User already logged in, redirecting from ${state.uri} to main navigation');
         return '/';
@@ -79,12 +78,21 @@ class AppRouter {
   final List<RouteBase> _routes = [
     GoRoute(
       path: PagePath.home,
-      pageBuilder: (context, state) => CustomTransitionPage<void>(
-        key: state.pageKey,
-        child: const ChatScreen(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-            FadeTransition(opacity: animation, child: child),
-      ),
+      pageBuilder: (context, state) {
+        // Get sessionId from query params, return null if not present or empty
+        final sessionIdParam = state.uri.queryParameters['id'];
+        final sessionId = (sessionIdParam != null && sessionIdParam.isNotEmpty)
+            ? sessionIdParam
+            : null;
+
+        return CustomTransitionPage<void>(
+          // Use a unique key based on sessionId to force rebuild when it changes
+          key: ValueKey('chat_$sessionId'),
+          child: ChatPage(sessionId: sessionId),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+              FadeTransition(opacity: animation, child: child),
+        );
+      },
     ),
     GoRoute(
       path: PagePath.login,

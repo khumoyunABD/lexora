@@ -1,16 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lexora/core/constants/app_colors.dart';
+import 'package:lexora/core/constants/app_text_styles.dart';
+import 'package:lexora/features/session/domain/entities/message_entity.dart';
+import 'package:lexora/features/session/presentation/bloc/session_details_bloc.dart';
+import 'package:lexora/features/session/presentation/bloc/session_details_event.dart';
+import 'package:lexora/features/session/presentation/bloc/session_details_state.dart';
 import 'package:lexora/features/user/presentation/pages/side_drawer.dart';
 
-class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+class ChatPage extends StatefulWidget {
+  ChatPage({
+    super.key,
+    this.sessionId,
+  });
+
+  String? sessionId;
 
   @override
-  State<ChatScreen> createState() => _ChatScreenState();
+  State<ChatPage> createState() => _ChatPageState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatPageState extends State<ChatPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _textController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+  List<MessageEntity> _messages = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchSessionData();
+  }
+
+  @override
+  void didUpdateWidget(ChatPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Fetch new data if sessionId changed
+    if (oldWidget.sessionId != widget.sessionId) {
+      _messages = []; // Clear old messages
+      _fetchSessionData();
+    }
+  }
+
+  void _fetchSessionData() {
+    // Only fetch data if sessionId is not null AND not empty
+    if (widget.sessionId != null && widget.sessionId!.isNotEmpty) {
+      context
+          .read<SessionDetailsBloc>()
+          .add(SessionDetailsEvent.getMessages(sessionId: widget.sessionId!));
+      context
+          .read<SessionDetailsBloc>()
+          .add(SessionDetailsEvent.getArtifacts(sessionId: widget.sessionId!));
+      context
+          .read<SessionDetailsBloc>()
+          .add(SessionDetailsEvent.getSources(sessionId: widget.sessionId!));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +69,73 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             _buildTopBar(),
             Expanded(
-              child: _buildChatContent(),
+              child: BlocConsumer<SessionDetailsBloc, SessionDetailsState>(
+                listener: (context, state) {
+                  state.maybeWhen(
+                    error: (failure) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content:
+                              Text(failure.errorMessage ?? 'An error occurred'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    },
+                    orElse: () {},
+                  );
+                },
+                builder: (context, state) {
+                  return state.maybeWhen(
+                    loading: () {
+                      // Show loading only if we don't have messages yet
+                      if (_messages.isEmpty) {
+                        return const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        );
+                      }
+                      // If we already have messages, keep showing them
+                      return _buildChatContent();
+                    },
+                    messagesLoaded: (messagesResponse) {
+                      _messages = messagesResponse.messages;
+                      if (_messages.isEmpty) {
+                        return _buildEmptyChatContent();
+                      }
+                      return _buildChatContent();
+                    },
+                    sourcesLoaded: (_) {
+                      // Keep showing messages when sources are loaded
+                      if (_messages.isEmpty) {
+                        return _buildEmptyChatContent();
+                      }
+                      return _buildChatContent();
+                    },
+                    artifactsLoaded: (_) {
+                      // Keep showing messages when artifacts are loaded
+                      if (_messages.isEmpty) {
+                        return _buildEmptyChatContent();
+                      }
+                      return _buildChatContent();
+                    },
+                    orElse: () {
+                      // If we have messages, show them
+                      if (_messages.isNotEmpty) {
+                        return _buildChatContent();
+                      }
+                      // Otherwise show appropriate state
+                      return widget.sessionId == null
+                          ? _buildEmptyChatContent()
+                          : const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            );
+                    },
+                  );
+                },
+              ),
             ),
             _buildBottomInputBar(),
           ],
@@ -58,7 +170,7 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ),
 
-          // Refresh button
+          // Used sources button
           Container(
             width: 56,
             height: 56,
@@ -71,7 +183,7 @@ class _ChatScreenState extends State<ChatScreen> {
               // Icons.content_paste_search,
 
               //current icon
-              Icons.library_books_outlined,
+              Icons.more_vert,
               color: Colors.white,
               size: 24,
             ),
@@ -81,7 +193,7 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Widget _buildChatContent() {
+  Widget _buildEmptyChatContent() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -124,6 +236,42 @@ class _ChatScreenState extends State<ChatScreen> {
           //   ],
           // ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildChatContent() {
+    return ListView.builder(
+      controller: _scrollController,
+      padding: EdgeInsets.all(16.w),
+      itemCount: _messages.length,
+      itemBuilder: (context, index) {
+        return _buildMessageBubble(_messages[index]);
+      },
+    );
+  }
+
+  Widget _buildMessageBubble(MessageEntity message) {
+    final isUser = message.role.contains('user');
+    return Align(
+      alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 4.h),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+        constraints: BoxConstraints(maxWidth: 280.w),
+        decoration: BoxDecoration(
+          color: isUser ? AppColors.surface : AppColors.background,
+          borderRadius: BorderRadius.circular(16.r).copyWith(
+            bottomRight: isUser ? Radius.circular(4.r) : null,
+            bottomLeft: !isUser ? Radius.circular(4.r) : null,
+          ),
+        ),
+        child: Text(
+          message.content,
+          style: AppTextStyles.body.copyWith(
+            color: isUser ? Colors.white : AppColors.textPrimary,
+          ),
+        ),
       ),
     );
   }

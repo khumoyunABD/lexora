@@ -15,7 +15,6 @@ class AppTextStyles {
     fontSize: 24,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
-    
   );
 
   // Body Text

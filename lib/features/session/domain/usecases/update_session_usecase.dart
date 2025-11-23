@@ -4,13 +4,15 @@ import 'package:lexora/core/usecase/usecase.dart';
 import 'package:lexora/features/session/domain/entities/session_entity.dart';
 import 'package:lexora/features/session/domain/repositories/session_repository.dart';
 
-class UpdateSessionUseCase implements UseCase<SessionEntity, UpdateSessionParams> {
+class UpdateSessionUseCase
+    implements UseCase<SessionEntity, UpdateSessionParams> {
   final SessionRepository repository;
 
   UpdateSessionUseCase(this.repository);
 
   @override
-  Future<Either<Failure, SessionEntity>> call(UpdateSessionParams params) async {
+  Future<Either<Failure, SessionEntity>> call(
+      UpdateSessionParams params) async {
     return await repository.updateSession(
       id: params.id,
       title: params.title,

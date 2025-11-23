@@ -1,24 +1,18 @@
 import 'package:equatable/equatable.dart';
 
 class SessionEntity extends Equatable {
-  final int id;
-  final String title;
-  final String? description;
-  final String startTime;
-  final String? endTime;
-  final int? durationMinutes;
-  final String status;
+  final String id;
+  final int userId;
+  final String agentType;
+  final String name;
   final String createdAt;
   final String? updatedAt;
 
   const SessionEntity({
     required this.id,
-    required this.title,
-    this.description,
-    required this.startTime,
-    this.endTime,
-    this.durationMinutes,
-    required this.status,
+    required this.userId,
+    required this.agentType,
+    required this.name,
     required this.createdAt,
     this.updatedAt,
   });
@@ -26,12 +20,9 @@ class SessionEntity extends Equatable {
   @override
   List<Object?> get props => [
         id,
-        title,
-        description,
-        startTime,
-        endTime,
-        durationMinutes,
-        status,
+        userId,
+        agentType,
+        name,
         createdAt,
         updatedAt,
       ];

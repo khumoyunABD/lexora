@@ -10,23 +10,27 @@ import 'package:lexora/features/auth/domain/usecases/login_usecase.dart';
 import 'package:lexora/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:lexora/features/auth/domain/usecases/register_usecase.dart';
 import 'package:lexora/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:lexora/features/session/data/datasources/session_api_service.dart';
+import 'package:lexora/features/session/data/datasources/session_datasource.dart';
+import 'package:lexora/features/session/data/repositories/session_repository_impl.dart';
+import 'package:lexora/features/session/domain/repositories/session_repository.dart';
+import 'package:lexora/features/session/domain/usecases/create_session_usecase.dart';
+import 'package:lexora/features/session/domain/usecases/delete_session_usecase.dart';
+import 'package:lexora/features/session/domain/usecases/end_session_usecase.dart';
+import 'package:lexora/features/session/domain/usecases/get_artifacts_usecase.dart';
+import 'package:lexora/features/session/domain/usecases/get_messages_usecase.dart';
+import 'package:lexora/features/session/domain/usecases/get_session_by_id_usecase.dart';
+import 'package:lexora/features/session/domain/usecases/get_sessions_usecase.dart';
+import 'package:lexora/features/session/domain/usecases/get_sources_usecase.dart';
+import 'package:lexora/features/session/domain/usecases/update_session_usecase.dart';
+import 'package:lexora/features/session/presentation/bloc/session_bloc.dart';
+import 'package:lexora/features/session/presentation/bloc/session_details_bloc.dart';
 import 'package:lexora/features/user/data/datasources/user_api_service.dart';
 import 'package:lexora/features/user/data/datasources/user_datasource.dart';
 import 'package:lexora/features/user/data/repositories/user_repository_impl.dart';
 import 'package:lexora/features/user/domain/repositories/user_repository.dart';
 import 'package:lexora/features/user/domain/usecases/get_user_info_usecase.dart';
 import 'package:lexora/features/user/presentation/bloc/user_bloc.dart';
-import 'package:lexora/features/session/data/datasources/session_api_service.dart';
-import 'package:lexora/features/session/data/datasources/session_datasource.dart';
-import 'package:lexora/features/session/data/repositories/session_repository_impl.dart';
-import 'package:lexora/features/session/domain/repositories/session_repository.dart';
-import 'package:lexora/features/session/domain/usecases/get_sessions_usecase.dart';
-import 'package:lexora/features/session/domain/usecases/get_session_by_id_usecase.dart';
-import 'package:lexora/features/session/domain/usecases/create_session_usecase.dart';
-import 'package:lexora/features/session/domain/usecases/update_session_usecase.dart';
-import 'package:lexora/features/session/domain/usecases/delete_session_usecase.dart';
-import 'package:lexora/features/session/domain/usecases/end_session_usecase.dart';
-import 'package:lexora/features/session/presentation/bloc/session_bloc.dart';
 
 final di = GetIt.I;
 
@@ -77,6 +81,9 @@ void setupDI() {
   di.registerLazySingleton(() => UpdateSessionUseCase(di<SessionRepository>()));
   di.registerLazySingleton(() => DeleteSessionUseCase(di<SessionRepository>()));
   di.registerLazySingleton(() => EndSessionUseCase(di<SessionRepository>()));
+  di.registerLazySingleton(() => GetMessagesUseCase(di<SessionRepository>()));
+  di.registerLazySingleton(() => GetSourcesUseCase(di<SessionRepository>()));
+  di.registerLazySingleton(() => GetArtifactsUseCase(di<SessionRepository>()));
 
   //  blocs
   di.registerLazySingleton(() => AuthBloc(
@@ -94,5 +101,10 @@ void setupDI() {
         updateSessionUseCase: di<UpdateSessionUseCase>(),
         deleteSessionUseCase: di<DeleteSessionUseCase>(),
         endSessionUseCase: di<EndSessionUseCase>(),
+      ));
+  di.registerLazySingleton(() => SessionDetailsBloc(
+        getMessagesUseCase: di<GetMessagesUseCase>(),
+        getSourcesUseCase: di<GetSourcesUseCase>(),
+        getArtifactsUseCase: di<GetArtifactsUseCase>(),
       ));
 }
