@@ -15,7 +15,7 @@ class DeleteSessionUseCase implements UseCase<void, DeleteSessionParams> {
 }
 
 class DeleteSessionParams {
-  final int id;
+  final String id;
 
   const DeleteSessionParams({required this.id});
 }

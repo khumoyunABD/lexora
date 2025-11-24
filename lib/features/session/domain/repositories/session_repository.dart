@@ -18,8 +18,7 @@ abstract class SessionRepository {
     String? description,
     String? status,
   });
-  Future<Either<Failure, void>> deleteSession(int id);
-  Future<Either<Failure, SessionEntity>> endSession(int id);
+  Future<Either<Failure, void>> deleteSession(String id);
   Future<Either<Failure, MessageResponseEntity>> getMessages(String id);
   Future<Either<Failure, SourcesResponseEntity>> getSources(String id);
   Future<Either<Failure, ArtifactsResponseEntity>> getArtifacts(String id);

@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lexora/core/constants/app_colors.dart';
-import 'package:lexora/core/constants/app_text_styles.dart';
+import 'package:go_router/go_router.dart';
+import 'package:lexora/features/session/domain/entities/artifact_entity.dart';
 import 'package:lexora/features/session/domain/entities/message_entity.dart';
+import 'package:lexora/features/session/domain/entities/source_entity.dart';
+import 'package:lexora/features/session/presentation/bloc/session_bloc.dart';
 import 'package:lexora/features/session/presentation/bloc/session_details_bloc.dart';
 import 'package:lexora/features/session/presentation/bloc/session_details_event.dart';
 import 'package:lexora/features/session/presentation/bloc/session_details_state.dart';
+import 'package:lexora/features/session/presentation/bloc/session_event.dart';
+import 'package:lexora/features/session/presentation/bloc/session_state.dart';
 import 'package:lexora/features/user/presentation/pages/side_drawer.dart';
+import 'package:lexora/features/user/presentation/pages/tts_helper.dart';
+import 'package:lexora/features/user/presentation/pages/widgets/artifacts_bottom_sheet.dart';
+import 'package:lexora/features/user/presentation/pages/widgets/chat_input_bar.dart';
+import 'package:lexora/features/user/presentation/pages/widgets/chat_top_bar.dart';
+import 'package:lexora/features/user/presentation/pages/widgets/message_bubble.dart';
 
 class ChatPage extends StatefulWidget {
   ChatPage({
@@ -26,25 +35,48 @@ class _ChatPageState extends State<ChatPage> {
   final TextEditingController _textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   List<MessageEntity> _messages = [];
+  List<SourceItemEntity> _sources = [];
+  List<ArtifactEntity> _artifacts = [];
+
+  // Store like/dislike states for each message (index-based)
+  final Map<int, bool?> _messageFeedback =
+      {}; // null = no feedback, true = liked, false = disliked
+
+  // Track copied state for each message
+  final Map<int, bool> _copiedStates = {};
+
+  final TTSHelper _ttsHelper = TTSHelper();
+  int? _playingMessageIndex;
 
   @override
   void initState() {
     super.initState();
     _fetchSessionData();
+    _initializeTts();
+  }
+
+  void _initializeTts() async {
+    await _ttsHelper.initialize();
+
+    _ttsHelper.flutterTts.setCompletionHandler(() {
+      setState(() {
+        _playingMessageIndex = null;
+      });
+    });
   }
 
   @override
   void didUpdateWidget(ChatPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Fetch new data if sessionId changed
     if (oldWidget.sessionId != widget.sessionId) {
-      _messages = []; // Clear old messages
+      _messages = [];
+      _messageFeedback.clear();
+      _copiedStates.clear();
       _fetchSessionData();
     }
   }
 
   void _fetchSessionData() {
-    // Only fetch data if sessionId is not null AND not empty
     if (widget.sessionId != null && widget.sessionId!.isNotEmpty) {
       context
           .read<SessionDetailsBloc>()
@@ -58,134 +90,115 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: Colors.black,
-      drawer: const SideDrawer(),
-      body: SafeArea(
-        child: Column(
-          children: [
-            _buildTopBar(),
-            Expanded(
-              child: BlocConsumer<SessionDetailsBloc, SessionDetailsState>(
-                listener: (context, state) {
-                  state.maybeWhen(
-                    error: (failure) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content:
-                              Text(failure.errorMessage ?? 'An error occurred'),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    },
-                    orElse: () {},
-                  );
-                },
-                builder: (context, state) {
-                  return state.maybeWhen(
-                    loading: () {
-                      // Show loading only if we don't have messages yet
-                      if (_messages.isEmpty) {
-                        return const Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                          ),
-                        );
-                      }
-                      // If we already have messages, keep showing them
-                      return _buildChatContent();
-                    },
-                    messagesLoaded: (messagesResponse) {
-                      _messages = messagesResponse.messages;
-                      if (_messages.isEmpty) {
-                        return _buildEmptyChatContent();
-                      }
-                      return _buildChatContent();
-                    },
-                    sourcesLoaded: (_) {
-                      // Keep showing messages when sources are loaded
-                      if (_messages.isEmpty) {
-                        return _buildEmptyChatContent();
-                      }
-                      return _buildChatContent();
-                    },
-                    artifactsLoaded: (_) {
-                      // Keep showing messages when artifacts are loaded
-                      if (_messages.isEmpty) {
-                        return _buildEmptyChatContent();
-                      }
-                      return _buildChatContent();
-                    },
-                    orElse: () {
-                      // If we have messages, show them
-                      if (_messages.isNotEmpty) {
-                        return _buildChatContent();
-                      }
-                      // Otherwise show appropriate state
-                      return widget.sessionId == null
-                          ? _buildEmptyChatContent()
-                          : const Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                              ),
-                            );
-                    },
-                  );
-                },
-              ),
-            ),
-            _buildBottomInputBar(),
-          ],
+  void _handleMenuAction(String action) {
+    switch (action) {
+      case 'artifacts':
+        _showArtifactsBottomSheet();
+        break;
+      case 'bookmark':
+        _handleBookmark();
+        break;
+      case 'new_chat':
+        _handleNewChat();
+      case 'delete':
+        _handleDelete();
+        break;
+    }
+  }
+
+  void _showArtifactsBottomSheet() {
+    if (_artifacts.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Text('No artifacts available'),
+          backgroundColor: Colors.grey,
         ),
+      );
+      return;
+    }
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) => ArtifactsBottomSheet(artifacts: _artifacts),
+    );
+  }
+
+  void _handleBookmark() {
+    // TODO: Implement bookmark functionality
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Session bookmarked'),
+        backgroundColor: Colors.orange,
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }
 
-  Widget _buildTopBar() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Menu button
-          GestureDetector(
-            onTap: () {
-              _scaffoldKey.currentState?.openDrawer();
-            },
-            child: Container(
-              width: 56,
-              height: 56,
-              decoration: BoxDecoration(
-                color: const Color(0xFF1E1E1E),
-                borderRadius: BorderRadius.circular(28),
-              ),
-              child: const Icon(
-                Icons.menu,
-                color: Colors.white,
-                size: 24,
-              ),
+  void _handleNewChat() {
+    context.go('/');
+  }
+
+  void _handleDelete() {
+    if (widget.sessionId == null || widget.sessionId!.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No session to delete'),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    // Show confirmation dialog
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF1E1E1E),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: const Text(
+          'Delete Chat',
+          style: TextStyle(color: Colors.white),
+        ),
+        content: const Text(
+          'Are you sure you want to delete this chat? This action cannot be undone.',
+          style: TextStyle(color: Colors.white70),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: Colors.white70),
             ),
           ),
-
-          // Used sources button
-          Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              color: const Color(0xFF1E1E1E),
-              borderRadius: BorderRadius.circular(28),
-            ),
-            child: const Icon(
-              //cool icon
-              // Icons.content_paste_search,
-
-              //current icon
-              Icons.more_vert,
-              color: Colors.white,
-              size: 24,
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              // Parse sessionId to int and dispatch delete event
+              // final sessionIdInt = int.tryParse(widget.sessionId!);
+              if (widget.sessionId != null) {
+                context.read<SessionBloc>().add(
+                      SessionEvent.deleteSession(id: widget.sessionId!),
+                    );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Invalid session ID'),
+                    backgroundColor: Colors.red,
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              }
+            },
+            child: const Text(
+              'Delete',
+              style: TextStyle(color: Colors.red),
             ),
           ),
         ],
@@ -193,12 +206,127 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<SessionBloc, SessionState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          sessionDeleted: () {
+            // Show success message
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Session deleted successfully'),
+                backgroundColor: Color(0xFF2D5F3C),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+            // Navigate to home
+            context.go('/');
+          },
+          error: (failure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content:
+                    Text(failure.errorMessage ?? 'Failed to delete session'),
+                backgroundColor: Colors.red,
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          },
+          orElse: () {},
+        );
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor: Colors.black,
+        drawer: const SideDrawer(),
+        body: SafeArea(
+          child: Column(
+            children: [
+              ChatTopBar(
+                scaffoldKey: _scaffoldKey,
+                sessionId: widget.sessionId,
+                onMenuAction: _handleMenuAction,
+              ),
+              Expanded(
+                child: BlocConsumer<SessionDetailsBloc, SessionDetailsState>(
+                  listener: (context, state) {
+                    state.maybeWhen(
+                      error: (failure) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                failure.errorMessage ?? 'An error occurred'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      },
+                      orElse: () {},
+                    );
+                  },
+                  builder: (context, state) {
+                    return state.maybeWhen(
+                      loading: () {
+                        if (_messages.isEmpty) {
+                          return const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          );
+                        }
+                        return _buildChatContent();
+                      },
+                      messagesLoaded: (messagesResponse) {
+                        _messages = messagesResponse.messages;
+                        if (_messages.isEmpty) {
+                          return _buildEmptyChatContent();
+                        }
+                        return _buildChatContent();
+                      },
+                      sourcesLoaded: (sourcesResponse) {
+                        _sources = sourcesResponse.sources;
+                        if (_messages.isEmpty) {
+                          return _buildEmptyChatContent();
+                        }
+                        return _buildChatContent();
+                      },
+                      artifactsLoaded: (artifactsResponse) {
+                        _artifacts = artifactsResponse.artifacts;
+                        if (_messages.isEmpty) {
+                          return _buildEmptyChatContent();
+                        }
+                        return _buildChatContent();
+                      },
+                      orElse: () {
+                        if (_messages.isNotEmpty) {
+                          return _buildChatContent();
+                        }
+                        return widget.sessionId == null
+                            ? _buildEmptyChatContent()
+                            : const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              );
+                      },
+                    );
+                  },
+                ),
+              ),
+              ChatInputBar(textController: _textController),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildEmptyChatContent() {
-    return Center(
+    return const Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
+          Text(
             textAlign: TextAlign.center,
             'What can I help you \nwith?',
             style: TextStyle(
@@ -207,34 +335,7 @@ class _ChatPageState extends State<ChatPage> {
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 40),
-          // Wrap(
-          //   spacing: 12,
-          //   runSpacing: 12,
-          //   alignment: WrapAlignment.center,
-          //   children: [
-          //     _buildActionButton(
-          //       icon: Icons.image_outlined,
-          //       label: 'Create image',
-          //       color: const Color(0xFF2D5F3C),
-          //     ),
-          //     _buildActionButton(
-          //       icon: Icons.article_outlined,
-          //       label: 'Summarize text',
-          //       color: const Color(0xFF6B4423),
-          //     ),
-          //     _buildActionButton(
-          //       icon: Icons.bar_chart,
-          //       label: 'Analyze data',
-          //       color: const Color(0xFF1E4B5F),
-          //     ),
-          //     _buildActionButton(
-          //       icon: Icons.more_horiz,
-          //       label: 'More',
-          //       color: const Color(0xFF1E1E1E),
-          //     ),
-          //   ],
-          // ),
+          SizedBox(height: 40),
         ],
       ),
     );
@@ -246,140 +347,39 @@ class _ChatPageState extends State<ChatPage> {
       padding: EdgeInsets.all(16.w),
       itemCount: _messages.length,
       itemBuilder: (context, index) {
-        return _buildMessageBubble(_messages[index]);
+        return MessageBubble(
+          message: _messages[index],
+          index: index,
+          sources: _sources,
+          ttsHelper: _ttsHelper,
+          playingMessageIndex: _playingMessageIndex,
+          onPlayingChanged: (playing) {
+            setState(() {
+              _playingMessageIndex = playing;
+            });
+          },
+          messageFeedback: _messageFeedback,
+          copiedStates: _copiedStates,
+          onFeedbackChanged: (index, feedback) {
+            setState(() {
+              _messageFeedback[index] = feedback;
+            });
+          },
+          onCopiedChanged: (index, copied) {
+            setState(() {
+              _copiedStates[index] = copied;
+            });
+          },
+        );
       },
-    );
-  }
-
-  Widget _buildMessageBubble(MessageEntity message) {
-    final isUser = message.role.contains('user');
-    return Align(
-      alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 4.h),
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-        constraints: BoxConstraints(maxWidth: 280.w),
-        decoration: BoxDecoration(
-          color: isUser ? AppColors.surface : AppColors.background,
-          borderRadius: BorderRadius.circular(16.r).copyWith(
-            bottomRight: isUser ? Radius.circular(4.r) : null,
-            bottomLeft: !isUser ? Radius.circular(4.r) : null,
-          ),
-        ),
-        child: Text(
-          message.content,
-          style: AppTextStyles.body.copyWith(
-            color: isUser ? Colors.white : AppColors.textPrimary,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildActionButton({
-    required IconData icon,
-    required String label,
-    required Color color,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.1),
-          width: 1,
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            color: Colors.white.withValues(alpha: 0.9),
-            size: 20,
-          ),
-          const SizedBox(width: 8),
-          Text(
-            label,
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.9),
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBottomInputBar() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: Row(
-        children: [
-          // Plus button
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: const Color(0xFF1E1E1E),
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: const Icon(
-              Icons.add,
-              color: Colors.white,
-              size: 24,
-            ),
-          ),
-          const SizedBox(width: 12),
-          // Text input field
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.only(
-                right: 12,
-                left: 24,
-              ),
-              decoration: BoxDecoration(
-                color: const Color(0xFF1E1E1E),
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _textController,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: 'Ask Lexora',
-                        hintStyle: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.4),
-                          fontSize: 16,
-                        ),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                  const Icon(
-                    Icons.arrow_upward,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 
   @override
   void dispose() {
     _textController.dispose();
+    _scrollController.dispose();
+    _ttsHelper.stop();
     super.dispose();
   }
 }

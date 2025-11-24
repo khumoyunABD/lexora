@@ -138,35 +138,10 @@ class SessionRepositoryImpl extends SessionRepository {
   }
 
   @override
-  Future<Either<Failure, void>> deleteSession(int id) async {
+  Future<Either<Failure, void>> deleteSession(String id) async {
     try {
       await datasource.deleteSession(id);
       return const Right(null);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(
-        errorMessage: e.errorMessage,
-        statusCode: e.statusCode,
-      ));
-    } on ParsingException catch (e) {
-      return Left(ParsingFailure(errorMessage: e.errorMessage));
-    } on DioException catch (e) {
-      return Left(ServerFailure(
-        errorMessage: e.message ?? 'Network error occurred',
-        statusCode: e.response?.statusCode ?? 500,
-      ));
-    } catch (e) {
-      return Left(ServerFailure(
-        errorMessage: 'An unexpected error occurred',
-        statusCode: 500,
-      ));
-    }
-  }
-
-  @override
-  Future<Either<Failure, SessionEntity>> endSession(int id) async {
-    try {
-      final session = await datasource.endSession(id);
-      return Right(session.toEntity());
     } on ServerException catch (e) {
       return Left(ServerFailure(
         errorMessage: e.errorMessage,

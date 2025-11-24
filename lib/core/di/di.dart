@@ -16,7 +16,6 @@ import 'package:lexora/features/session/data/repositories/session_repository_imp
 import 'package:lexora/features/session/domain/repositories/session_repository.dart';
 import 'package:lexora/features/session/domain/usecases/create_session_usecase.dart';
 import 'package:lexora/features/session/domain/usecases/delete_session_usecase.dart';
-import 'package:lexora/features/session/domain/usecases/end_session_usecase.dart';
 import 'package:lexora/features/session/domain/usecases/get_artifacts_usecase.dart';
 import 'package:lexora/features/session/domain/usecases/get_messages_usecase.dart';
 import 'package:lexora/features/session/domain/usecases/get_session_by_id_usecase.dart';
@@ -80,7 +79,6 @@ void setupDI() {
   di.registerLazySingleton(() => CreateSessionUseCase(di<SessionRepository>()));
   di.registerLazySingleton(() => UpdateSessionUseCase(di<SessionRepository>()));
   di.registerLazySingleton(() => DeleteSessionUseCase(di<SessionRepository>()));
-  di.registerLazySingleton(() => EndSessionUseCase(di<SessionRepository>()));
   di.registerLazySingleton(() => GetMessagesUseCase(di<SessionRepository>()));
   di.registerLazySingleton(() => GetSourcesUseCase(di<SessionRepository>()));
   di.registerLazySingleton(() => GetArtifactsUseCase(di<SessionRepository>()));
@@ -100,7 +98,6 @@ void setupDI() {
         createSessionUseCase: di<CreateSessionUseCase>(),
         updateSessionUseCase: di<UpdateSessionUseCase>(),
         deleteSessionUseCase: di<DeleteSessionUseCase>(),
-        endSessionUseCase: di<EndSessionUseCase>(),
       ));
   di.registerLazySingleton(() => SessionDetailsBloc(
         getMessagesUseCase: di<GetMessagesUseCase>(),

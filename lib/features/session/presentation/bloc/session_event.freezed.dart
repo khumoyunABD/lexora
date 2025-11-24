@@ -24,8 +24,7 @@ mixin _$SessionEvent {
     required TResult Function(
             int id, String? title, String? description, String? status)
         updateSession,
-    required TResult Function(int id) deleteSession,
-    required TResult Function(int id) endSession,
+    required TResult Function(String id) deleteSession,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -36,8 +35,7 @@ mixin _$SessionEvent {
     TResult? Function(
             int id, String? title, String? description, String? status)?
         updateSession,
-    TResult? Function(int id)? deleteSession,
-    TResult? Function(int id)? endSession,
+    TResult? Function(String id)? deleteSession,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -48,8 +46,7 @@ mixin _$SessionEvent {
     TResult Function(
             int id, String? title, String? description, String? status)?
         updateSession,
-    TResult Function(int id)? deleteSession,
-    TResult Function(int id)? endSession,
+    TResult Function(String id)? deleteSession,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -60,7 +57,6 @@ mixin _$SessionEvent {
     required TResult Function(CreateSessionEvent value) createSession,
     required TResult Function(UpdateSessionEvent value) updateSession,
     required TResult Function(DeleteSessionEvent value) deleteSession,
-    required TResult Function(EndSessionEvent value) endSession,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -70,7 +66,6 @@ mixin _$SessionEvent {
     TResult? Function(CreateSessionEvent value)? createSession,
     TResult? Function(UpdateSessionEvent value)? updateSession,
     TResult? Function(DeleteSessionEvent value)? deleteSession,
-    TResult? Function(EndSessionEvent value)? endSession,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -80,7 +75,6 @@ mixin _$SessionEvent {
     TResult Function(CreateSessionEvent value)? createSession,
     TResult Function(UpdateSessionEvent value)? updateSession,
     TResult Function(DeleteSessionEvent value)? deleteSession,
-    TResult Function(EndSessionEvent value)? endSession,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -154,8 +148,7 @@ class _$GetSessionsEventImpl implements GetSessionsEvent {
     required TResult Function(
             int id, String? title, String? description, String? status)
         updateSession,
-    required TResult Function(int id) deleteSession,
-    required TResult Function(int id) endSession,
+    required TResult Function(String id) deleteSession,
   }) {
     return getSessions();
   }
@@ -169,8 +162,7 @@ class _$GetSessionsEventImpl implements GetSessionsEvent {
     TResult? Function(
             int id, String? title, String? description, String? status)?
         updateSession,
-    TResult? Function(int id)? deleteSession,
-    TResult? Function(int id)? endSession,
+    TResult? Function(String id)? deleteSession,
   }) {
     return getSessions?.call();
   }
@@ -184,8 +176,7 @@ class _$GetSessionsEventImpl implements GetSessionsEvent {
     TResult Function(
             int id, String? title, String? description, String? status)?
         updateSession,
-    TResult Function(int id)? deleteSession,
-    TResult Function(int id)? endSession,
+    TResult Function(String id)? deleteSession,
     required TResult orElse(),
   }) {
     if (getSessions != null) {
@@ -202,7 +193,6 @@ class _$GetSessionsEventImpl implements GetSessionsEvent {
     required TResult Function(CreateSessionEvent value) createSession,
     required TResult Function(UpdateSessionEvent value) updateSession,
     required TResult Function(DeleteSessionEvent value) deleteSession,
-    required TResult Function(EndSessionEvent value) endSession,
   }) {
     return getSessions(this);
   }
@@ -215,7 +205,6 @@ class _$GetSessionsEventImpl implements GetSessionsEvent {
     TResult? Function(CreateSessionEvent value)? createSession,
     TResult? Function(UpdateSessionEvent value)? updateSession,
     TResult? Function(DeleteSessionEvent value)? deleteSession,
-    TResult? Function(EndSessionEvent value)? endSession,
   }) {
     return getSessions?.call(this);
   }
@@ -228,7 +217,6 @@ class _$GetSessionsEventImpl implements GetSessionsEvent {
     TResult Function(CreateSessionEvent value)? createSession,
     TResult Function(UpdateSessionEvent value)? updateSession,
     TResult Function(DeleteSessionEvent value)? deleteSession,
-    TResult Function(EndSessionEvent value)? endSession,
     required TResult orElse(),
   }) {
     if (getSessions != null) {
@@ -317,8 +305,7 @@ class _$GetSessionByIdEventImpl implements GetSessionByIdEvent {
     required TResult Function(
             int id, String? title, String? description, String? status)
         updateSession,
-    required TResult Function(int id) deleteSession,
-    required TResult Function(int id) endSession,
+    required TResult Function(String id) deleteSession,
   }) {
     return getSessionById(id);
   }
@@ -332,8 +319,7 @@ class _$GetSessionByIdEventImpl implements GetSessionByIdEvent {
     TResult? Function(
             int id, String? title, String? description, String? status)?
         updateSession,
-    TResult? Function(int id)? deleteSession,
-    TResult? Function(int id)? endSession,
+    TResult? Function(String id)? deleteSession,
   }) {
     return getSessionById?.call(id);
   }
@@ -347,8 +333,7 @@ class _$GetSessionByIdEventImpl implements GetSessionByIdEvent {
     TResult Function(
             int id, String? title, String? description, String? status)?
         updateSession,
-    TResult Function(int id)? deleteSession,
-    TResult Function(int id)? endSession,
+    TResult Function(String id)? deleteSession,
     required TResult orElse(),
   }) {
     if (getSessionById != null) {
@@ -365,7 +350,6 @@ class _$GetSessionByIdEventImpl implements GetSessionByIdEvent {
     required TResult Function(CreateSessionEvent value) createSession,
     required TResult Function(UpdateSessionEvent value) updateSession,
     required TResult Function(DeleteSessionEvent value) deleteSession,
-    required TResult Function(EndSessionEvent value) endSession,
   }) {
     return getSessionById(this);
   }
@@ -378,7 +362,6 @@ class _$GetSessionByIdEventImpl implements GetSessionByIdEvent {
     TResult? Function(CreateSessionEvent value)? createSession,
     TResult? Function(UpdateSessionEvent value)? updateSession,
     TResult? Function(DeleteSessionEvent value)? deleteSession,
-    TResult? Function(EndSessionEvent value)? endSession,
   }) {
     return getSessionById?.call(this);
   }
@@ -391,7 +374,6 @@ class _$GetSessionByIdEventImpl implements GetSessionByIdEvent {
     TResult Function(CreateSessionEvent value)? createSession,
     TResult Function(UpdateSessionEvent value)? updateSession,
     TResult Function(DeleteSessionEvent value)? deleteSession,
-    TResult Function(EndSessionEvent value)? endSession,
     required TResult orElse(),
   }) {
     if (getSessionById != null) {
@@ -498,8 +480,7 @@ class _$CreateSessionEventImpl implements CreateSessionEvent {
     required TResult Function(
             int id, String? title, String? description, String? status)
         updateSession,
-    required TResult Function(int id) deleteSession,
-    required TResult Function(int id) endSession,
+    required TResult Function(String id) deleteSession,
   }) {
     return createSession(title, description);
   }
@@ -513,8 +494,7 @@ class _$CreateSessionEventImpl implements CreateSessionEvent {
     TResult? Function(
             int id, String? title, String? description, String? status)?
         updateSession,
-    TResult? Function(int id)? deleteSession,
-    TResult? Function(int id)? endSession,
+    TResult? Function(String id)? deleteSession,
   }) {
     return createSession?.call(title, description);
   }
@@ -528,8 +508,7 @@ class _$CreateSessionEventImpl implements CreateSessionEvent {
     TResult Function(
             int id, String? title, String? description, String? status)?
         updateSession,
-    TResult Function(int id)? deleteSession,
-    TResult Function(int id)? endSession,
+    TResult Function(String id)? deleteSession,
     required TResult orElse(),
   }) {
     if (createSession != null) {
@@ -546,7 +525,6 @@ class _$CreateSessionEventImpl implements CreateSessionEvent {
     required TResult Function(CreateSessionEvent value) createSession,
     required TResult Function(UpdateSessionEvent value) updateSession,
     required TResult Function(DeleteSessionEvent value) deleteSession,
-    required TResult Function(EndSessionEvent value) endSession,
   }) {
     return createSession(this);
   }
@@ -559,7 +537,6 @@ class _$CreateSessionEventImpl implements CreateSessionEvent {
     TResult? Function(CreateSessionEvent value)? createSession,
     TResult? Function(UpdateSessionEvent value)? updateSession,
     TResult? Function(DeleteSessionEvent value)? deleteSession,
-    TResult? Function(EndSessionEvent value)? endSession,
   }) {
     return createSession?.call(this);
   }
@@ -572,7 +549,6 @@ class _$CreateSessionEventImpl implements CreateSessionEvent {
     TResult Function(CreateSessionEvent value)? createSession,
     TResult Function(UpdateSessionEvent value)? updateSession,
     TResult Function(DeleteSessionEvent value)? deleteSession,
-    TResult Function(EndSessionEvent value)? endSession,
     required TResult orElse(),
   }) {
     if (createSession != null) {
@@ -698,8 +674,7 @@ class _$UpdateSessionEventImpl implements UpdateSessionEvent {
     required TResult Function(
             int id, String? title, String? description, String? status)
         updateSession,
-    required TResult Function(int id) deleteSession,
-    required TResult Function(int id) endSession,
+    required TResult Function(String id) deleteSession,
   }) {
     return updateSession(id, title, description, status);
   }
@@ -713,8 +688,7 @@ class _$UpdateSessionEventImpl implements UpdateSessionEvent {
     TResult? Function(
             int id, String? title, String? description, String? status)?
         updateSession,
-    TResult? Function(int id)? deleteSession,
-    TResult? Function(int id)? endSession,
+    TResult? Function(String id)? deleteSession,
   }) {
     return updateSession?.call(id, title, description, status);
   }
@@ -728,8 +702,7 @@ class _$UpdateSessionEventImpl implements UpdateSessionEvent {
     TResult Function(
             int id, String? title, String? description, String? status)?
         updateSession,
-    TResult Function(int id)? deleteSession,
-    TResult Function(int id)? endSession,
+    TResult Function(String id)? deleteSession,
     required TResult orElse(),
   }) {
     if (updateSession != null) {
@@ -746,7 +719,6 @@ class _$UpdateSessionEventImpl implements UpdateSessionEvent {
     required TResult Function(CreateSessionEvent value) createSession,
     required TResult Function(UpdateSessionEvent value) updateSession,
     required TResult Function(DeleteSessionEvent value) deleteSession,
-    required TResult Function(EndSessionEvent value) endSession,
   }) {
     return updateSession(this);
   }
@@ -759,7 +731,6 @@ class _$UpdateSessionEventImpl implements UpdateSessionEvent {
     TResult? Function(CreateSessionEvent value)? createSession,
     TResult? Function(UpdateSessionEvent value)? updateSession,
     TResult? Function(DeleteSessionEvent value)? deleteSession,
-    TResult? Function(EndSessionEvent value)? endSession,
   }) {
     return updateSession?.call(this);
   }
@@ -772,7 +743,6 @@ class _$UpdateSessionEventImpl implements UpdateSessionEvent {
     TResult Function(CreateSessionEvent value)? createSession,
     TResult Function(UpdateSessionEvent value)? updateSession,
     TResult Function(DeleteSessionEvent value)? deleteSession,
-    TResult Function(EndSessionEvent value)? endSession,
     required TResult orElse(),
   }) {
     if (updateSession != null) {
@@ -807,7 +777,7 @@ abstract class _$$DeleteSessionEventImplCopyWith<$Res> {
           $Res Function(_$DeleteSessionEventImpl) then) =
       __$$DeleteSessionEventImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({int id});
+  $Res call({String id});
 }
 
 /// @nodoc
@@ -829,7 +799,7 @@ class __$$DeleteSessionEventImplCopyWithImpl<$Res>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
     ));
   }
 }
@@ -840,7 +810,7 @@ class _$DeleteSessionEventImpl implements DeleteSessionEvent {
   const _$DeleteSessionEventImpl({required this.id});
 
   @override
-  final int id;
+  final String id;
 
   @override
   String toString() {
@@ -876,8 +846,7 @@ class _$DeleteSessionEventImpl implements DeleteSessionEvent {
     required TResult Function(
             int id, String? title, String? description, String? status)
         updateSession,
-    required TResult Function(int id) deleteSession,
-    required TResult Function(int id) endSession,
+    required TResult Function(String id) deleteSession,
   }) {
     return deleteSession(id);
   }
@@ -891,8 +860,7 @@ class _$DeleteSessionEventImpl implements DeleteSessionEvent {
     TResult? Function(
             int id, String? title, String? description, String? status)?
         updateSession,
-    TResult? Function(int id)? deleteSession,
-    TResult? Function(int id)? endSession,
+    TResult? Function(String id)? deleteSession,
   }) {
     return deleteSession?.call(id);
   }
@@ -906,8 +874,7 @@ class _$DeleteSessionEventImpl implements DeleteSessionEvent {
     TResult Function(
             int id, String? title, String? description, String? status)?
         updateSession,
-    TResult Function(int id)? deleteSession,
-    TResult Function(int id)? endSession,
+    TResult Function(String id)? deleteSession,
     required TResult orElse(),
   }) {
     if (deleteSession != null) {
@@ -924,7 +891,6 @@ class _$DeleteSessionEventImpl implements DeleteSessionEvent {
     required TResult Function(CreateSessionEvent value) createSession,
     required TResult Function(UpdateSessionEvent value) updateSession,
     required TResult Function(DeleteSessionEvent value) deleteSession,
-    required TResult Function(EndSessionEvent value) endSession,
   }) {
     return deleteSession(this);
   }
@@ -937,7 +903,6 @@ class _$DeleteSessionEventImpl implements DeleteSessionEvent {
     TResult? Function(CreateSessionEvent value)? createSession,
     TResult? Function(UpdateSessionEvent value)? updateSession,
     TResult? Function(DeleteSessionEvent value)? deleteSession,
-    TResult? Function(EndSessionEvent value)? endSession,
   }) {
     return deleteSession?.call(this);
   }
@@ -950,7 +915,6 @@ class _$DeleteSessionEventImpl implements DeleteSessionEvent {
     TResult Function(CreateSessionEvent value)? createSession,
     TResult Function(UpdateSessionEvent value)? updateSession,
     TResult Function(DeleteSessionEvent value)? deleteSession,
-    TResult Function(EndSessionEvent value)? endSession,
     required TResult orElse(),
   }) {
     if (deleteSession != null) {
@@ -961,186 +925,14 @@ class _$DeleteSessionEventImpl implements DeleteSessionEvent {
 }
 
 abstract class DeleteSessionEvent implements SessionEvent {
-  const factory DeleteSessionEvent({required final int id}) =
+  const factory DeleteSessionEvent({required final String id}) =
       _$DeleteSessionEventImpl;
 
-  int get id;
+  String get id;
 
   /// Create a copy of SessionEvent
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DeleteSessionEventImplCopyWith<_$DeleteSessionEventImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$EndSessionEventImplCopyWith<$Res> {
-  factory _$$EndSessionEventImplCopyWith(_$EndSessionEventImpl value,
-          $Res Function(_$EndSessionEventImpl) then) =
-      __$$EndSessionEventImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({int id});
-}
-
-/// @nodoc
-class __$$EndSessionEventImplCopyWithImpl<$Res>
-    extends _$SessionEventCopyWithImpl<$Res, _$EndSessionEventImpl>
-    implements _$$EndSessionEventImplCopyWith<$Res> {
-  __$$EndSessionEventImplCopyWithImpl(
-      _$EndSessionEventImpl _value, $Res Function(_$EndSessionEventImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of SessionEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = null,
-  }) {
-    return _then(_$EndSessionEventImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$EndSessionEventImpl implements EndSessionEvent {
-  const _$EndSessionEventImpl({required this.id});
-
-  @override
-  final int id;
-
-  @override
-  String toString() {
-    return 'SessionEvent.endSession(id: $id)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$EndSessionEventImpl &&
-            (identical(other.id, id) || other.id == id));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, id);
-
-  /// Create a copy of SessionEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$EndSessionEventImplCopyWith<_$EndSessionEventImpl> get copyWith =>
-      __$$EndSessionEventImplCopyWithImpl<_$EndSessionEventImpl>(
-          this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() getSessions,
-    required TResult Function(int id) getSessionById,
-    required TResult Function(String title, String? description) createSession,
-    required TResult Function(
-            int id, String? title, String? description, String? status)
-        updateSession,
-    required TResult Function(int id) deleteSession,
-    required TResult Function(int id) endSession,
-  }) {
-    return endSession(id);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? getSessions,
-    TResult? Function(int id)? getSessionById,
-    TResult? Function(String title, String? description)? createSession,
-    TResult? Function(
-            int id, String? title, String? description, String? status)?
-        updateSession,
-    TResult? Function(int id)? deleteSession,
-    TResult? Function(int id)? endSession,
-  }) {
-    return endSession?.call(id);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? getSessions,
-    TResult Function(int id)? getSessionById,
-    TResult Function(String title, String? description)? createSession,
-    TResult Function(
-            int id, String? title, String? description, String? status)?
-        updateSession,
-    TResult Function(int id)? deleteSession,
-    TResult Function(int id)? endSession,
-    required TResult orElse(),
-  }) {
-    if (endSession != null) {
-      return endSession(id);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(GetSessionsEvent value) getSessions,
-    required TResult Function(GetSessionByIdEvent value) getSessionById,
-    required TResult Function(CreateSessionEvent value) createSession,
-    required TResult Function(UpdateSessionEvent value) updateSession,
-    required TResult Function(DeleteSessionEvent value) deleteSession,
-    required TResult Function(EndSessionEvent value) endSession,
-  }) {
-    return endSession(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(GetSessionsEvent value)? getSessions,
-    TResult? Function(GetSessionByIdEvent value)? getSessionById,
-    TResult? Function(CreateSessionEvent value)? createSession,
-    TResult? Function(UpdateSessionEvent value)? updateSession,
-    TResult? Function(DeleteSessionEvent value)? deleteSession,
-    TResult? Function(EndSessionEvent value)? endSession,
-  }) {
-    return endSession?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(GetSessionsEvent value)? getSessions,
-    TResult Function(GetSessionByIdEvent value)? getSessionById,
-    TResult Function(CreateSessionEvent value)? createSession,
-    TResult Function(UpdateSessionEvent value)? updateSession,
-    TResult Function(DeleteSessionEvent value)? deleteSession,
-    TResult Function(EndSessionEvent value)? endSession,
-    required TResult orElse(),
-  }) {
-    if (endSession != null) {
-      return endSession(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class EndSessionEvent implements SessionEvent {
-  const factory EndSessionEvent({required final int id}) =
-      _$EndSessionEventImpl;
-
-  int get id;
-
-  /// Create a copy of SessionEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$EndSessionEventImplCopyWith<_$EndSessionEventImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

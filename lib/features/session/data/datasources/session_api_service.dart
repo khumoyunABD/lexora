@@ -30,10 +30,7 @@ abstract class SessionApiService {
   );
 
   @DELETE('agents/sessions/{id}')
-  Future<void> deleteSession(@Path('id') int id);
-
-  @POST('agents/sessions/{id}/end')
-  Future<SessionModel> endSession(@Path('id') int id);
+  Future<void> deleteSession(@Path('id') String id);
 
   /// Messages
   @GET('agents/research/sessions/{id}/messages')

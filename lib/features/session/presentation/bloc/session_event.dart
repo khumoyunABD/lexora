@@ -23,10 +23,6 @@ class SessionEvent with _$SessionEvent {
   }) = UpdateSessionEvent;
 
   const factory SessionEvent.deleteSession({
-    required int id,
+    required String id,
   }) = DeleteSessionEvent;
-
-  const factory SessionEvent.endSession({
-    required int id,
-  }) = EndSessionEvent;
 }

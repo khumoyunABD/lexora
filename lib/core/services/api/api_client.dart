@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:lexora/core/services/api/custom_auth_interceptor.dart';
 import 'package:lexora/core/services/local_storage/local_storage_repository.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 class ApiClient {
   late Dio _dio;
@@ -20,13 +21,15 @@ class ApiClient {
       },
     ));
 
-    // Add logging interceptor
-    _dio.interceptors.add(LogInterceptor(
-      responseBody: true,
-      requestBody: true,
+    // Add pretty logging interceptor
+    _dio.interceptors.add(PrettyDioLogger(
       requestHeader: true,
+      requestBody: true,
+      responseBody: true,
       responseHeader: true,
       error: true,
+      compact: true,
+      maxWidth: 90,
       logPrint: (object) => log(object.toString()),
     ));
 

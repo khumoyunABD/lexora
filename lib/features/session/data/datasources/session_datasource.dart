@@ -61,23 +61,12 @@ class SessionDatasource {
     }
   }
 
-  Future<void> deleteSession(int id) async {
+  Future<void> deleteSession(String id) async {
     try {
       await _apiService.deleteSession(id);
       log('Deleted session: $id');
     } catch (e) {
       log('Failed to delete session $id: $e');
-      throw HandleError.handleError(e);
-    }
-  }
-
-  Future<SessionModel> endSession(int id) async {
-    try {
-      final session = await _apiService.endSession(id);
-      log('Ended session: $id');
-      return session;
-    } catch (e) {
-      log('Failed to end session $id: $e');
       throw HandleError.handleError(e);
     }
   }

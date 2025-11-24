@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lexora/core/usecase/usecase.dart';
 import 'package:lexora/features/session/domain/usecases/create_session_usecase.dart';
 import 'package:lexora/features/session/domain/usecases/delete_session_usecase.dart';
-import 'package:lexora/features/session/domain/usecases/end_session_usecase.dart';
 import 'package:lexora/features/session/domain/usecases/get_session_by_id_usecase.dart';
 import 'package:lexora/features/session/domain/usecases/get_sessions_usecase.dart';
 import 'package:lexora/features/session/domain/usecases/update_session_usecase.dart';
@@ -17,7 +16,6 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
   final CreateSessionUseCase createSessionUseCase;
   final UpdateSessionUseCase updateSessionUseCase;
   final DeleteSessionUseCase deleteSessionUseCase;
-  final EndSessionUseCase endSessionUseCase;
 
   SessionBloc({
     required this.getSessionsUseCase,
@@ -25,14 +23,12 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
     required this.createSessionUseCase,
     required this.updateSessionUseCase,
     required this.deleteSessionUseCase,
-    required this.endSessionUseCase,
   }) : super(const SessionState.initial()) {
     on<GetSessionsEvent>(_onGetSessions);
     on<GetSessionByIdEvent>(_onGetSessionById);
     on<CreateSessionEvent>(_onCreateSession);
     on<UpdateSessionEvent>(_onUpdateSession);
     on<DeleteSessionEvent>(_onDeleteSession);
-    on<EndSessionEvent>(_onEndSession);
   }
 
   Future<void> _onGetSessions(
@@ -133,25 +129,6 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
       (_) {
         log('Successfully deleted session ${event.id}');
         emit(const SessionState.sessionDeleted());
-      },
-    );
-  }
-
-  Future<void> _onEndSession(
-    EndSessionEvent event,
-    Emitter<SessionState> emit,
-  ) async {
-    emit(const SessionState.loading());
-    final params = EndSessionParams(id: event.id);
-    final result = await endSessionUseCase(params);
-    result.fold(
-      (failure) {
-        log('Failed to end session ${event.id}: ${failure.errorMessage}');
-        emit(SessionState.error(failure: failure));
-      },
-      (session) {
-        log('Successfully ended session ${session.id}');
-        emit(SessionState.sessionEnded(session: session));
       },
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lexora/features/session/presentation/bloc/session_bloc.dart';
 import 'package:lexora/features/session/presentation/bloc/session_event.dart';
@@ -76,22 +77,22 @@ class _SideDrawerState extends State<SideDrawer> {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF2A2A2A),
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      child: const Icon(
-                        Icons.menu,
-                        color: Colors.white,
-                        size: 24,
-                      ),
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () => Navigator.pop(context),
+                  //   child: Container(
+                  //     width: 48,
+                  //     height: 48,
+                  //     decoration: BoxDecoration(
+                  //       color: const Color(0xFF2A2A2A),
+                  //       borderRadius: BorderRadius.circular(24),
+                  //     ),
+                  //     child: const Icon(
+                  //       Icons.menu,
+                  //       color: Colors.white,
+                  //       size: 24,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -106,21 +107,17 @@ class _SideDrawerState extends State<SideDrawer> {
                         icon: Icons.edit_outlined,
                         label: 'New chat',
                         onTap: () {
-                          Navigator.pop(context);
+                          // Navigator.pop(context);
                           context.go(PagePath.home);
                         },
                       ),
-                      const SizedBox(height: 8),
-                      _buildMenuItem(
-                        icon: Icons.photo_library_outlined,
-                        label: 'Library',
-                      ),
-                      const SizedBox(height: 24),
+
+                      SizedBox(height: 8.h),
                       _buildMenuItem(
                         icon: Icons.create_new_folder_outlined,
                         label: 'New project',
                       ),
-                      const SizedBox(height: 24),
+                      SizedBox(height: 16.h),
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 8),
                         child: Divider(color: Color(0xFF2A2A2A), height: 1),
