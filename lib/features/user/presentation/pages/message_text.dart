@@ -14,8 +14,8 @@ class MessageText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RichText(
-      text: TextSpan(
+    return SelectableText.rich(
+      TextSpan(
         style: style,
         children: _parseMarkdown(content, style),
       ),

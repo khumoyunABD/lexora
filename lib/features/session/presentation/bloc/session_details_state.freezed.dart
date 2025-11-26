@@ -24,6 +24,7 @@ mixin _$SessionDetailsState {
     required TResult Function(SourcesResponseEntity sources) sourcesLoaded,
     required TResult Function(ArtifactsResponseEntity artifacts)
         artifactsLoaded,
+    required TResult Function(ChatResponseEntity response) chatSent,
     required TResult Function(Failure failure) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -34,6 +35,7 @@ mixin _$SessionDetailsState {
     TResult? Function(MessageResponseEntity messages)? messagesLoaded,
     TResult? Function(SourcesResponseEntity sources)? sourcesLoaded,
     TResult? Function(ArtifactsResponseEntity artifacts)? artifactsLoaded,
+    TResult? Function(ChatResponseEntity response)? chatSent,
     TResult? Function(Failure failure)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -44,6 +46,7 @@ mixin _$SessionDetailsState {
     TResult Function(MessageResponseEntity messages)? messagesLoaded,
     TResult Function(SourcesResponseEntity sources)? sourcesLoaded,
     TResult Function(ArtifactsResponseEntity artifacts)? artifactsLoaded,
+    TResult Function(ChatResponseEntity response)? chatSent,
     TResult Function(Failure failure)? error,
     required TResult orElse(),
   }) =>
@@ -55,6 +58,7 @@ mixin _$SessionDetailsState {
     required TResult Function(MessagesLoaded value) messagesLoaded,
     required TResult Function(SourcesLoaded value) sourcesLoaded,
     required TResult Function(ArtifactsLoaded value) artifactsLoaded,
+    required TResult Function(ChatSent value) chatSent,
     required TResult Function(SessionDetailsError value) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -65,6 +69,7 @@ mixin _$SessionDetailsState {
     TResult? Function(MessagesLoaded value)? messagesLoaded,
     TResult? Function(SourcesLoaded value)? sourcesLoaded,
     TResult? Function(ArtifactsLoaded value)? artifactsLoaded,
+    TResult? Function(ChatSent value)? chatSent,
     TResult? Function(SessionDetailsError value)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -75,6 +80,7 @@ mixin _$SessionDetailsState {
     TResult Function(MessagesLoaded value)? messagesLoaded,
     TResult Function(SourcesLoaded value)? sourcesLoaded,
     TResult Function(ArtifactsLoaded value)? artifactsLoaded,
+    TResult Function(ChatSent value)? chatSent,
     TResult Function(SessionDetailsError value)? error,
     required TResult orElse(),
   }) =>
@@ -151,6 +157,7 @@ class _$SessionDetailsInitialImpl implements SessionDetailsInitial {
     required TResult Function(SourcesResponseEntity sources) sourcesLoaded,
     required TResult Function(ArtifactsResponseEntity artifacts)
         artifactsLoaded,
+    required TResult Function(ChatResponseEntity response) chatSent,
     required TResult Function(Failure failure) error,
   }) {
     return initial();
@@ -164,6 +171,7 @@ class _$SessionDetailsInitialImpl implements SessionDetailsInitial {
     TResult? Function(MessageResponseEntity messages)? messagesLoaded,
     TResult? Function(SourcesResponseEntity sources)? sourcesLoaded,
     TResult? Function(ArtifactsResponseEntity artifacts)? artifactsLoaded,
+    TResult? Function(ChatResponseEntity response)? chatSent,
     TResult? Function(Failure failure)? error,
   }) {
     return initial?.call();
@@ -177,6 +185,7 @@ class _$SessionDetailsInitialImpl implements SessionDetailsInitial {
     TResult Function(MessageResponseEntity messages)? messagesLoaded,
     TResult Function(SourcesResponseEntity sources)? sourcesLoaded,
     TResult Function(ArtifactsResponseEntity artifacts)? artifactsLoaded,
+    TResult Function(ChatResponseEntity response)? chatSent,
     TResult Function(Failure failure)? error,
     required TResult orElse(),
   }) {
@@ -194,6 +203,7 @@ class _$SessionDetailsInitialImpl implements SessionDetailsInitial {
     required TResult Function(MessagesLoaded value) messagesLoaded,
     required TResult Function(SourcesLoaded value) sourcesLoaded,
     required TResult Function(ArtifactsLoaded value) artifactsLoaded,
+    required TResult Function(ChatSent value) chatSent,
     required TResult Function(SessionDetailsError value) error,
   }) {
     return initial(this);
@@ -207,6 +217,7 @@ class _$SessionDetailsInitialImpl implements SessionDetailsInitial {
     TResult? Function(MessagesLoaded value)? messagesLoaded,
     TResult? Function(SourcesLoaded value)? sourcesLoaded,
     TResult? Function(ArtifactsLoaded value)? artifactsLoaded,
+    TResult? Function(ChatSent value)? chatSent,
     TResult? Function(SessionDetailsError value)? error,
   }) {
     return initial?.call(this);
@@ -220,6 +231,7 @@ class _$SessionDetailsInitialImpl implements SessionDetailsInitial {
     TResult Function(MessagesLoaded value)? messagesLoaded,
     TResult Function(SourcesLoaded value)? sourcesLoaded,
     TResult Function(ArtifactsLoaded value)? artifactsLoaded,
+    TResult Function(ChatSent value)? chatSent,
     TResult Function(SessionDetailsError value)? error,
     required TResult orElse(),
   }) {
@@ -283,6 +295,7 @@ class _$SessionDetailsLoadingImpl implements SessionDetailsLoading {
     required TResult Function(SourcesResponseEntity sources) sourcesLoaded,
     required TResult Function(ArtifactsResponseEntity artifacts)
         artifactsLoaded,
+    required TResult Function(ChatResponseEntity response) chatSent,
     required TResult Function(Failure failure) error,
   }) {
     return loading();
@@ -296,6 +309,7 @@ class _$SessionDetailsLoadingImpl implements SessionDetailsLoading {
     TResult? Function(MessageResponseEntity messages)? messagesLoaded,
     TResult? Function(SourcesResponseEntity sources)? sourcesLoaded,
     TResult? Function(ArtifactsResponseEntity artifacts)? artifactsLoaded,
+    TResult? Function(ChatResponseEntity response)? chatSent,
     TResult? Function(Failure failure)? error,
   }) {
     return loading?.call();
@@ -309,6 +323,7 @@ class _$SessionDetailsLoadingImpl implements SessionDetailsLoading {
     TResult Function(MessageResponseEntity messages)? messagesLoaded,
     TResult Function(SourcesResponseEntity sources)? sourcesLoaded,
     TResult Function(ArtifactsResponseEntity artifacts)? artifactsLoaded,
+    TResult Function(ChatResponseEntity response)? chatSent,
     TResult Function(Failure failure)? error,
     required TResult orElse(),
   }) {
@@ -326,6 +341,7 @@ class _$SessionDetailsLoadingImpl implements SessionDetailsLoading {
     required TResult Function(MessagesLoaded value) messagesLoaded,
     required TResult Function(SourcesLoaded value) sourcesLoaded,
     required TResult Function(ArtifactsLoaded value) artifactsLoaded,
+    required TResult Function(ChatSent value) chatSent,
     required TResult Function(SessionDetailsError value) error,
   }) {
     return loading(this);
@@ -339,6 +355,7 @@ class _$SessionDetailsLoadingImpl implements SessionDetailsLoading {
     TResult? Function(MessagesLoaded value)? messagesLoaded,
     TResult? Function(SourcesLoaded value)? sourcesLoaded,
     TResult? Function(ArtifactsLoaded value)? artifactsLoaded,
+    TResult? Function(ChatSent value)? chatSent,
     TResult? Function(SessionDetailsError value)? error,
   }) {
     return loading?.call(this);
@@ -352,6 +369,7 @@ class _$SessionDetailsLoadingImpl implements SessionDetailsLoading {
     TResult Function(MessagesLoaded value)? messagesLoaded,
     TResult Function(SourcesLoaded value)? sourcesLoaded,
     TResult Function(ArtifactsLoaded value)? artifactsLoaded,
+    TResult Function(ChatSent value)? chatSent,
     TResult Function(SessionDetailsError value)? error,
     required TResult orElse(),
   }) {
@@ -442,6 +460,7 @@ class _$MessagesLoadedImpl implements MessagesLoaded {
     required TResult Function(SourcesResponseEntity sources) sourcesLoaded,
     required TResult Function(ArtifactsResponseEntity artifacts)
         artifactsLoaded,
+    required TResult Function(ChatResponseEntity response) chatSent,
     required TResult Function(Failure failure) error,
   }) {
     return messagesLoaded(messages);
@@ -455,6 +474,7 @@ class _$MessagesLoadedImpl implements MessagesLoaded {
     TResult? Function(MessageResponseEntity messages)? messagesLoaded,
     TResult? Function(SourcesResponseEntity sources)? sourcesLoaded,
     TResult? Function(ArtifactsResponseEntity artifacts)? artifactsLoaded,
+    TResult? Function(ChatResponseEntity response)? chatSent,
     TResult? Function(Failure failure)? error,
   }) {
     return messagesLoaded?.call(messages);
@@ -468,6 +488,7 @@ class _$MessagesLoadedImpl implements MessagesLoaded {
     TResult Function(MessageResponseEntity messages)? messagesLoaded,
     TResult Function(SourcesResponseEntity sources)? sourcesLoaded,
     TResult Function(ArtifactsResponseEntity artifacts)? artifactsLoaded,
+    TResult Function(ChatResponseEntity response)? chatSent,
     TResult Function(Failure failure)? error,
     required TResult orElse(),
   }) {
@@ -485,6 +506,7 @@ class _$MessagesLoadedImpl implements MessagesLoaded {
     required TResult Function(MessagesLoaded value) messagesLoaded,
     required TResult Function(SourcesLoaded value) sourcesLoaded,
     required TResult Function(ArtifactsLoaded value) artifactsLoaded,
+    required TResult Function(ChatSent value) chatSent,
     required TResult Function(SessionDetailsError value) error,
   }) {
     return messagesLoaded(this);
@@ -498,6 +520,7 @@ class _$MessagesLoadedImpl implements MessagesLoaded {
     TResult? Function(MessagesLoaded value)? messagesLoaded,
     TResult? Function(SourcesLoaded value)? sourcesLoaded,
     TResult? Function(ArtifactsLoaded value)? artifactsLoaded,
+    TResult? Function(ChatSent value)? chatSent,
     TResult? Function(SessionDetailsError value)? error,
   }) {
     return messagesLoaded?.call(this);
@@ -511,6 +534,7 @@ class _$MessagesLoadedImpl implements MessagesLoaded {
     TResult Function(MessagesLoaded value)? messagesLoaded,
     TResult Function(SourcesLoaded value)? sourcesLoaded,
     TResult Function(ArtifactsLoaded value)? artifactsLoaded,
+    TResult Function(ChatSent value)? chatSent,
     TResult Function(SessionDetailsError value)? error,
     required TResult orElse(),
   }) {
@@ -608,6 +632,7 @@ class _$SourcesLoadedImpl implements SourcesLoaded {
     required TResult Function(SourcesResponseEntity sources) sourcesLoaded,
     required TResult Function(ArtifactsResponseEntity artifacts)
         artifactsLoaded,
+    required TResult Function(ChatResponseEntity response) chatSent,
     required TResult Function(Failure failure) error,
   }) {
     return sourcesLoaded(sources);
@@ -621,6 +646,7 @@ class _$SourcesLoadedImpl implements SourcesLoaded {
     TResult? Function(MessageResponseEntity messages)? messagesLoaded,
     TResult? Function(SourcesResponseEntity sources)? sourcesLoaded,
     TResult? Function(ArtifactsResponseEntity artifacts)? artifactsLoaded,
+    TResult? Function(ChatResponseEntity response)? chatSent,
     TResult? Function(Failure failure)? error,
   }) {
     return sourcesLoaded?.call(sources);
@@ -634,6 +660,7 @@ class _$SourcesLoadedImpl implements SourcesLoaded {
     TResult Function(MessageResponseEntity messages)? messagesLoaded,
     TResult Function(SourcesResponseEntity sources)? sourcesLoaded,
     TResult Function(ArtifactsResponseEntity artifacts)? artifactsLoaded,
+    TResult Function(ChatResponseEntity response)? chatSent,
     TResult Function(Failure failure)? error,
     required TResult orElse(),
   }) {
@@ -651,6 +678,7 @@ class _$SourcesLoadedImpl implements SourcesLoaded {
     required TResult Function(MessagesLoaded value) messagesLoaded,
     required TResult Function(SourcesLoaded value) sourcesLoaded,
     required TResult Function(ArtifactsLoaded value) artifactsLoaded,
+    required TResult Function(ChatSent value) chatSent,
     required TResult Function(SessionDetailsError value) error,
   }) {
     return sourcesLoaded(this);
@@ -664,6 +692,7 @@ class _$SourcesLoadedImpl implements SourcesLoaded {
     TResult? Function(MessagesLoaded value)? messagesLoaded,
     TResult? Function(SourcesLoaded value)? sourcesLoaded,
     TResult? Function(ArtifactsLoaded value)? artifactsLoaded,
+    TResult? Function(ChatSent value)? chatSent,
     TResult? Function(SessionDetailsError value)? error,
   }) {
     return sourcesLoaded?.call(this);
@@ -677,6 +706,7 @@ class _$SourcesLoadedImpl implements SourcesLoaded {
     TResult Function(MessagesLoaded value)? messagesLoaded,
     TResult Function(SourcesLoaded value)? sourcesLoaded,
     TResult Function(ArtifactsLoaded value)? artifactsLoaded,
+    TResult Function(ChatSent value)? chatSent,
     TResult Function(SessionDetailsError value)? error,
     required TResult orElse(),
   }) {
@@ -776,6 +806,7 @@ class _$ArtifactsLoadedImpl implements ArtifactsLoaded {
     required TResult Function(SourcesResponseEntity sources) sourcesLoaded,
     required TResult Function(ArtifactsResponseEntity artifacts)
         artifactsLoaded,
+    required TResult Function(ChatResponseEntity response) chatSent,
     required TResult Function(Failure failure) error,
   }) {
     return artifactsLoaded(artifacts);
@@ -789,6 +820,7 @@ class _$ArtifactsLoadedImpl implements ArtifactsLoaded {
     TResult? Function(MessageResponseEntity messages)? messagesLoaded,
     TResult? Function(SourcesResponseEntity sources)? sourcesLoaded,
     TResult? Function(ArtifactsResponseEntity artifacts)? artifactsLoaded,
+    TResult? Function(ChatResponseEntity response)? chatSent,
     TResult? Function(Failure failure)? error,
   }) {
     return artifactsLoaded?.call(artifacts);
@@ -802,6 +834,7 @@ class _$ArtifactsLoadedImpl implements ArtifactsLoaded {
     TResult Function(MessageResponseEntity messages)? messagesLoaded,
     TResult Function(SourcesResponseEntity sources)? sourcesLoaded,
     TResult Function(ArtifactsResponseEntity artifacts)? artifactsLoaded,
+    TResult Function(ChatResponseEntity response)? chatSent,
     TResult Function(Failure failure)? error,
     required TResult orElse(),
   }) {
@@ -819,6 +852,7 @@ class _$ArtifactsLoadedImpl implements ArtifactsLoaded {
     required TResult Function(MessagesLoaded value) messagesLoaded,
     required TResult Function(SourcesLoaded value) sourcesLoaded,
     required TResult Function(ArtifactsLoaded value) artifactsLoaded,
+    required TResult Function(ChatSent value) chatSent,
     required TResult Function(SessionDetailsError value) error,
   }) {
     return artifactsLoaded(this);
@@ -832,6 +866,7 @@ class _$ArtifactsLoadedImpl implements ArtifactsLoaded {
     TResult? Function(MessagesLoaded value)? messagesLoaded,
     TResult? Function(SourcesLoaded value)? sourcesLoaded,
     TResult? Function(ArtifactsLoaded value)? artifactsLoaded,
+    TResult? Function(ChatSent value)? chatSent,
     TResult? Function(SessionDetailsError value)? error,
   }) {
     return artifactsLoaded?.call(this);
@@ -845,6 +880,7 @@ class _$ArtifactsLoadedImpl implements ArtifactsLoaded {
     TResult Function(MessagesLoaded value)? messagesLoaded,
     TResult Function(SourcesLoaded value)? sourcesLoaded,
     TResult Function(ArtifactsLoaded value)? artifactsLoaded,
+    TResult Function(ChatSent value)? chatSent,
     TResult Function(SessionDetailsError value)? error,
     required TResult orElse(),
   }) {
@@ -866,6 +902,179 @@ abstract class ArtifactsLoaded implements SessionDetailsState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ArtifactsLoadedImplCopyWith<_$ArtifactsLoadedImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$ChatSentImplCopyWith<$Res> {
+  factory _$$ChatSentImplCopyWith(
+          _$ChatSentImpl value, $Res Function(_$ChatSentImpl) then) =
+      __$$ChatSentImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({ChatResponseEntity response});
+}
+
+/// @nodoc
+class __$$ChatSentImplCopyWithImpl<$Res>
+    extends _$SessionDetailsStateCopyWithImpl<$Res, _$ChatSentImpl>
+    implements _$$ChatSentImplCopyWith<$Res> {
+  __$$ChatSentImplCopyWithImpl(
+      _$ChatSentImpl _value, $Res Function(_$ChatSentImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SessionDetailsState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? response = null,
+  }) {
+    return _then(_$ChatSentImpl(
+      response: null == response
+          ? _value.response
+          : response // ignore: cast_nullable_to_non_nullable
+              as ChatResponseEntity,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$ChatSentImpl implements ChatSent {
+  const _$ChatSentImpl({required this.response});
+
+  @override
+  final ChatResponseEntity response;
+
+  @override
+  String toString() {
+    return 'SessionDetailsState.chatSent(response: $response)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ChatSentImpl &&
+            (identical(other.response, response) ||
+                other.response == response));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, response);
+
+  /// Create a copy of SessionDetailsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ChatSentImplCopyWith<_$ChatSentImpl> get copyWith =>
+      __$$ChatSentImplCopyWithImpl<_$ChatSentImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(MessageResponseEntity messages) messagesLoaded,
+    required TResult Function(SourcesResponseEntity sources) sourcesLoaded,
+    required TResult Function(ArtifactsResponseEntity artifacts)
+        artifactsLoaded,
+    required TResult Function(ChatResponseEntity response) chatSent,
+    required TResult Function(Failure failure) error,
+  }) {
+    return chatSent(response);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(MessageResponseEntity messages)? messagesLoaded,
+    TResult? Function(SourcesResponseEntity sources)? sourcesLoaded,
+    TResult? Function(ArtifactsResponseEntity artifacts)? artifactsLoaded,
+    TResult? Function(ChatResponseEntity response)? chatSent,
+    TResult? Function(Failure failure)? error,
+  }) {
+    return chatSent?.call(response);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(MessageResponseEntity messages)? messagesLoaded,
+    TResult Function(SourcesResponseEntity sources)? sourcesLoaded,
+    TResult Function(ArtifactsResponseEntity artifacts)? artifactsLoaded,
+    TResult Function(ChatResponseEntity response)? chatSent,
+    TResult Function(Failure failure)? error,
+    required TResult orElse(),
+  }) {
+    if (chatSent != null) {
+      return chatSent(response);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(SessionDetailsInitial value) initial,
+    required TResult Function(SessionDetailsLoading value) loading,
+    required TResult Function(MessagesLoaded value) messagesLoaded,
+    required TResult Function(SourcesLoaded value) sourcesLoaded,
+    required TResult Function(ArtifactsLoaded value) artifactsLoaded,
+    required TResult Function(ChatSent value) chatSent,
+    required TResult Function(SessionDetailsError value) error,
+  }) {
+    return chatSent(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(SessionDetailsInitial value)? initial,
+    TResult? Function(SessionDetailsLoading value)? loading,
+    TResult? Function(MessagesLoaded value)? messagesLoaded,
+    TResult? Function(SourcesLoaded value)? sourcesLoaded,
+    TResult? Function(ArtifactsLoaded value)? artifactsLoaded,
+    TResult? Function(ChatSent value)? chatSent,
+    TResult? Function(SessionDetailsError value)? error,
+  }) {
+    return chatSent?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(SessionDetailsInitial value)? initial,
+    TResult Function(SessionDetailsLoading value)? loading,
+    TResult Function(MessagesLoaded value)? messagesLoaded,
+    TResult Function(SourcesLoaded value)? sourcesLoaded,
+    TResult Function(ArtifactsLoaded value)? artifactsLoaded,
+    TResult Function(ChatSent value)? chatSent,
+    TResult Function(SessionDetailsError value)? error,
+    required TResult orElse(),
+  }) {
+    if (chatSent != null) {
+      return chatSent(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ChatSent implements SessionDetailsState {
+  const factory ChatSent({required final ChatResponseEntity response}) =
+      _$ChatSentImpl;
+
+  ChatResponseEntity get response;
+
+  /// Create a copy of SessionDetailsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ChatSentImplCopyWith<_$ChatSentImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -944,6 +1153,7 @@ class _$SessionDetailsErrorImpl implements SessionDetailsError {
     required TResult Function(SourcesResponseEntity sources) sourcesLoaded,
     required TResult Function(ArtifactsResponseEntity artifacts)
         artifactsLoaded,
+    required TResult Function(ChatResponseEntity response) chatSent,
     required TResult Function(Failure failure) error,
   }) {
     return error(failure);
@@ -957,6 +1167,7 @@ class _$SessionDetailsErrorImpl implements SessionDetailsError {
     TResult? Function(MessageResponseEntity messages)? messagesLoaded,
     TResult? Function(SourcesResponseEntity sources)? sourcesLoaded,
     TResult? Function(ArtifactsResponseEntity artifacts)? artifactsLoaded,
+    TResult? Function(ChatResponseEntity response)? chatSent,
     TResult? Function(Failure failure)? error,
   }) {
     return error?.call(failure);
@@ -970,6 +1181,7 @@ class _$SessionDetailsErrorImpl implements SessionDetailsError {
     TResult Function(MessageResponseEntity messages)? messagesLoaded,
     TResult Function(SourcesResponseEntity sources)? sourcesLoaded,
     TResult Function(ArtifactsResponseEntity artifacts)? artifactsLoaded,
+    TResult Function(ChatResponseEntity response)? chatSent,
     TResult Function(Failure failure)? error,
     required TResult orElse(),
   }) {
@@ -987,6 +1199,7 @@ class _$SessionDetailsErrorImpl implements SessionDetailsError {
     required TResult Function(MessagesLoaded value) messagesLoaded,
     required TResult Function(SourcesLoaded value) sourcesLoaded,
     required TResult Function(ArtifactsLoaded value) artifactsLoaded,
+    required TResult Function(ChatSent value) chatSent,
     required TResult Function(SessionDetailsError value) error,
   }) {
     return error(this);
@@ -1000,6 +1213,7 @@ class _$SessionDetailsErrorImpl implements SessionDetailsError {
     TResult? Function(MessagesLoaded value)? messagesLoaded,
     TResult? Function(SourcesLoaded value)? sourcesLoaded,
     TResult? Function(ArtifactsLoaded value)? artifactsLoaded,
+    TResult? Function(ChatSent value)? chatSent,
     TResult? Function(SessionDetailsError value)? error,
   }) {
     return error?.call(this);
@@ -1013,6 +1227,7 @@ class _$SessionDetailsErrorImpl implements SessionDetailsError {
     TResult Function(MessagesLoaded value)? messagesLoaded,
     TResult Function(SourcesLoaded value)? sourcesLoaded,
     TResult Function(ArtifactsLoaded value)? artifactsLoaded,
+    TResult Function(ChatSent value)? chatSent,
     TResult Function(SessionDetailsError value)? error,
     required TResult orElse(),
   }) {

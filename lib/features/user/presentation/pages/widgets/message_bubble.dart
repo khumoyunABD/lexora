@@ -159,7 +159,8 @@ class _MessageBubbleState extends State<MessageBubble> {
               } else {
                 widget.onPlayingChanged(widget.index);
                 // Remove markdown links for TTS
-                String textToSpeak = _removeMarkdownLinks(widget.message.content);
+                String textToSpeak =
+                    _removeMarkdownLinks(widget.message.content);
                 await widget.ttsHelper.speakWithAutoLanguage(textToSpeak);
               }
             },

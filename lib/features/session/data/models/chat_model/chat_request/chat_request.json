@@ -1,0 +1,15 @@
+{
+    "messages": [
+        {
+            "role": "user",
+            "content": "what else can you do?",
+            "artifacts": [],
+            "metadata": {
+                "sources_used": [],
+                "confidence": 1,
+                "processing_time": 0
+            }
+        }
+    ],
+    "sources": []
+}

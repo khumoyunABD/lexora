@@ -11,16 +11,14 @@ class SessionEvent with _$SessionEvent {
   }) = GetSessionByIdEvent;
 
   const factory SessionEvent.createSession({
-    required String title,
-    String? description,
+    required String agentType,
+    required String name,
   }) = CreateSessionEvent;
 
-  const factory SessionEvent.updateSession({
+  const factory SessionEvent.updateSessionName({
     required int id,
-    String? title,
-    String? description,
-    String? status,
-  }) = UpdateSessionEvent;
+    required String name,
+  }) = UpdateSessionNameEvent;
 
   const factory SessionEvent.deleteSession({
     required String id,

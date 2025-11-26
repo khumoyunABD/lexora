@@ -21,6 +21,7 @@ import 'package:lexora/features/session/domain/usecases/get_messages_usecase.dar
 import 'package:lexora/features/session/domain/usecases/get_session_by_id_usecase.dart';
 import 'package:lexora/features/session/domain/usecases/get_sessions_usecase.dart';
 import 'package:lexora/features/session/domain/usecases/get_sources_usecase.dart';
+import 'package:lexora/features/session/domain/usecases/send_chat_usecase.dart';
 import 'package:lexora/features/session/domain/usecases/update_session_usecase.dart';
 import 'package:lexora/features/session/presentation/bloc/session_bloc.dart';
 import 'package:lexora/features/session/presentation/bloc/session_details_bloc.dart';
@@ -77,11 +78,12 @@ void setupDI() {
   di.registerLazySingleton(
       () => GetSessionByIdUseCase(di<SessionRepository>()));
   di.registerLazySingleton(() => CreateSessionUseCase(di<SessionRepository>()));
-  di.registerLazySingleton(() => UpdateSessionUseCase(di<SessionRepository>()));
+  di.registerLazySingleton(() => UpdateSessionNameUseCase(di<SessionRepository>()));
   di.registerLazySingleton(() => DeleteSessionUseCase(di<SessionRepository>()));
   di.registerLazySingleton(() => GetMessagesUseCase(di<SessionRepository>()));
   di.registerLazySingleton(() => GetSourcesUseCase(di<SessionRepository>()));
   di.registerLazySingleton(() => GetArtifactsUseCase(di<SessionRepository>()));
+  di.registerLazySingleton(() => SendChatUseCase(di<SessionRepository>()));
 
   //  blocs
   di.registerLazySingleton(() => AuthBloc(
@@ -96,12 +98,13 @@ void setupDI() {
         getSessionsUseCase: di<GetSessionsUseCase>(),
         getSessionByIdUseCase: di<GetSessionByIdUseCase>(),
         createSessionUseCase: di<CreateSessionUseCase>(),
-        updateSessionUseCase: di<UpdateSessionUseCase>(),
+        updateSessionNameUseCase: di<UpdateSessionNameUseCase>(),
         deleteSessionUseCase: di<DeleteSessionUseCase>(),
       ));
   di.registerLazySingleton(() => SessionDetailsBloc(
         getMessagesUseCase: di<GetMessagesUseCase>(),
         getSourcesUseCase: di<GetSourcesUseCase>(),
         getArtifactsUseCase: di<GetArtifactsUseCase>(),
+        sendChatUseCase: di<SendChatUseCase>(),
       ));
 }

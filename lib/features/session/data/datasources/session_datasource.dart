@@ -3,10 +3,12 @@ import 'dart:developer';
 import 'package:lexora/core/services/api/handle_error.dart';
 import 'package:lexora/features/session/data/datasources/session_api_service.dart';
 import 'package:lexora/features/session/data/models/artifact_model/artifact_model.dart';
+import 'package:lexora/features/session/data/models/chat_model/chat_request/chat_request_model.dart';
+import 'package:lexora/features/session/data/models/chat_model/chat_response/chat_response_model.dart';
 import 'package:lexora/features/session/data/models/message_model/message_model.dart';
 import 'package:lexora/features/session/data/models/session_model/create_session_request.dart';
 import 'package:lexora/features/session/data/models/session_model/session_model.dart';
-import 'package:lexora/features/session/data/models/session_model/update_session_request.dart';
+import 'package:lexora/features/session/data/models/session_model/update_session_name_request.dart';
 import 'package:lexora/features/session/data/models/source_model/source_model.dart';
 
 class SessionDatasource {
@@ -49,10 +51,10 @@ class SessionDatasource {
 
   Future<SessionModel> updateSession(
     int id,
-    UpdateSessionRequest request,
+    UpdateSessionNameRequest request,
   ) async {
     try {
-      final session = await _apiService.updateSession(id, request);
+      final session = await _apiService.updateSessionName(id, request);
       log('Updated session: $id');
       return session;
     } catch (e) {
@@ -100,6 +102,17 @@ class SessionDatasource {
       return artifacts;
     } catch (e) {
       log('Failed to fetch artifacts for session $id: $e');
+      throw HandleError.handleError(e);
+    }
+  }
+
+  Future<ChatResponse> sendChat(String sessionId, ChatRequest request) async {
+    try {
+      final response = await _apiService.sendChat(sessionId, request);
+      log('Sent chat message to session: $sessionId');
+      return response;
+    } catch (e) {
+      log('Failed to send chat to session $sessionId: $e');
       throw HandleError.handleError(e);
     }
   }

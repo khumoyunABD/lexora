@@ -20,8 +20,9 @@ CreateSessionRequest _$CreateSessionRequestFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CreateSessionRequest {
-  String get title => throw _privateConstructorUsedError;
-  String? get description => throw _privateConstructorUsedError;
+  @JsonKey(name: 'agent_type')
+  String get agentType => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
 
   /// Serializes this CreateSessionRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -39,7 +40,7 @@ abstract class $CreateSessionRequestCopyWith<$Res> {
           $Res Function(CreateSessionRequest) then) =
       _$CreateSessionRequestCopyWithImpl<$Res, CreateSessionRequest>;
   @useResult
-  $Res call({String title, String? description});
+  $Res call({@JsonKey(name: 'agent_type') String agentType, String name});
 }
 
 /// @nodoc
@@ -58,18 +59,18 @@ class _$CreateSessionRequestCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? title = null,
-    Object? description = freezed,
+    Object? agentType = null,
+    Object? name = null,
   }) {
     return _then(_value.copyWith(
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
+      agentType: null == agentType
+          ? _value.agentType
+          : agentType // ignore: cast_nullable_to_non_nullable
               as String,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -82,7 +83,7 @@ abstract class _$$CreateSessionRequestImplCopyWith<$Res>
       __$$CreateSessionRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String title, String? description});
+  $Res call({@JsonKey(name: 'agent_type') String agentType, String name});
 }
 
 /// @nodoc
@@ -98,18 +99,18 @@ class __$$CreateSessionRequestImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? title = null,
-    Object? description = freezed,
+    Object? agentType = null,
+    Object? name = null,
   }) {
     return _then(_$CreateSessionRequestImpl(
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
+      agentType: null == agentType
+          ? _value.agentType
+          : agentType // ignore: cast_nullable_to_non_nullable
               as String,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -117,19 +118,22 @@ class __$$CreateSessionRequestImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$CreateSessionRequestImpl implements _CreateSessionRequest {
-  const _$CreateSessionRequestImpl({required this.title, this.description});
+  const _$CreateSessionRequestImpl(
+      {@JsonKey(name: 'agent_type') required this.agentType,
+      required this.name});
 
   factory _$CreateSessionRequestImpl.fromJson(Map<String, dynamic> json) =>
       _$$CreateSessionRequestImplFromJson(json);
 
   @override
-  final String title;
+  @JsonKey(name: 'agent_type')
+  final String agentType;
   @override
-  final String? description;
+  final String name;
 
   @override
   String toString() {
-    return 'CreateSessionRequest(title: $title, description: $description)';
+    return 'CreateSessionRequest(agentType: $agentType, name: $name)';
   }
 
   @override
@@ -137,14 +141,14 @@ class _$CreateSessionRequestImpl implements _CreateSessionRequest {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CreateSessionRequestImpl &&
-            (identical(other.title, title) || other.title == title) &&
-            (identical(other.description, description) ||
-                other.description == description));
+            (identical(other.agentType, agentType) ||
+                other.agentType == agentType) &&
+            (identical(other.name, name) || other.name == name));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, title, description);
+  int get hashCode => Object.hash(runtimeType, agentType, name);
 
   /// Create a copy of CreateSessionRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -166,16 +170,17 @@ class _$CreateSessionRequestImpl implements _CreateSessionRequest {
 
 abstract class _CreateSessionRequest implements CreateSessionRequest {
   const factory _CreateSessionRequest(
-      {required final String title,
-      final String? description}) = _$CreateSessionRequestImpl;
+      {@JsonKey(name: 'agent_type') required final String agentType,
+      required final String name}) = _$CreateSessionRequestImpl;
 
   factory _CreateSessionRequest.fromJson(Map<String, dynamic> json) =
       _$CreateSessionRequestImpl.fromJson;
 
   @override
-  String get title;
+  @JsonKey(name: 'agent_type')
+  String get agentType;
   @override
-  String? get description;
+  String get name;
 
   /// Create a copy of CreateSessionRequest
   /// with the given fields replaced by the non-null parameter values.

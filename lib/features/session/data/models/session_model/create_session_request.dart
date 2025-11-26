@@ -6,8 +6,8 @@ part 'create_session_request.g.dart';
 @freezed
 class CreateSessionRequest with _$CreateSessionRequest {
   const factory CreateSessionRequest({
-    required String title,
-    String? description,
+    @JsonKey(name: 'agent_type') required String agentType,
+    required String name,
   }) = _CreateSessionRequest;
 
   factory CreateSessionRequest.fromJson(Map<String, dynamic> json) =>

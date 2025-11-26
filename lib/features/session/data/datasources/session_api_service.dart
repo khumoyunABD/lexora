@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:lexora/features/session/data/models/artifact_model/artifact_model.dart';
+import 'package:lexora/features/session/data/models/chat_model/chat_request/chat_request_model.dart';
+import 'package:lexora/features/session/data/models/chat_model/chat_response/chat_response_model.dart';
 import 'package:lexora/features/session/data/models/message_model/message_model.dart';
 import 'package:lexora/features/session/data/models/session_model/create_session_request.dart';
 import 'package:lexora/features/session/data/models/session_model/session_model.dart';
-import 'package:lexora/features/session/data/models/session_model/update_session_request.dart';
+import 'package:lexora/features/session/data/models/session_model/update_session_name_request.dart';
 import 'package:lexora/features/session/data/models/source_model/source_model.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -23,10 +25,10 @@ abstract class SessionApiService {
   @POST('agents/sessions')
   Future<SessionModel> createSession(@Body() CreateSessionRequest request);
 
-  @PUT('agents/sessions/{id}')
-  Future<SessionModel> updateSession(
+  @PUT('agents/sessions/{id}/name')
+  Future<SessionModel> updateSessionName(
     @Path('id') int id,
-    @Body() UpdateSessionRequest request,
+    @Body() UpdateSessionNameRequest request,
   );
 
   @DELETE('agents/sessions/{id}')
@@ -43,4 +45,11 @@ abstract class SessionApiService {
   /// Artifacts
   @GET('agents/research/sessions/{id}/artifacts')
   Future<ArtifactsResponse> getArtifacts(@Path('id') String id);
+
+  /// Sending message
+  @POST('agents/research/sessions/{id}/chat')
+  Future<ChatResponse> sendChat(
+    @Path('id') String id,
+    @Body() ChatRequest chatRequest,
+  );
 }

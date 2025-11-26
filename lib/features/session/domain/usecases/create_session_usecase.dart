@@ -12,18 +12,18 @@ class CreateSessionUseCase implements UseCase<SessionEntity, CreateSessionParams
   @override
   Future<Either<Failure, SessionEntity>> call(CreateSessionParams params) async {
     return await repository.createSession(
-      title: params.title,
-      description: params.description,
+      agentType: params.agentType,
+      name: params.name,
     );
   }
 }
 
 class CreateSessionParams {
-  final String title;
-  final String? description;
+  final String agentType;
+  final String name;
 
   const CreateSessionParams({
-    required this.title,
-    this.description,
+    required this.agentType,
+    required this.name,
   });
 }

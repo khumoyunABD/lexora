@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:lexora/features/auth/data/models/token_model/token_model.dart';
 import 'package:lexora/features/auth/data/models/auth_model/auth_model.dart';
+import 'package:lexora/features/auth/data/models/token_model/token_model.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'auth_api_service.g.dart';

@@ -4,12 +4,15 @@ import 'package:lexora/core/exceptions/exceptions.dart';
 import 'package:lexora/core/exceptions/failures.dart';
 import 'package:lexora/features/session/data/datasources/session_datasource.dart';
 import 'package:lexora/features/session/data/models/artifact_model/artifact_model.dart';
+import 'package:lexora/features/session/data/models/chat_model/chat_request/chat_request_model.dart';
 import 'package:lexora/features/session/data/models/message_model/message_model.dart';
 import 'package:lexora/features/session/data/models/session_model/create_session_request.dart';
 import 'package:lexora/features/session/data/models/session_model/session_model.dart';
-import 'package:lexora/features/session/data/models/session_model/update_session_request.dart';
+import 'package:lexora/features/session/data/models/session_model/update_session_name_request.dart';
 import 'package:lexora/features/session/data/models/source_model/source_model.dart';
 import 'package:lexora/features/session/domain/entities/artifact_entity.dart';
+import 'package:lexora/features/session/domain/entities/chat_request_entity.dart';
+import 'package:lexora/features/session/domain/entities/chat_response_entity.dart';
 import 'package:lexora/features/session/domain/entities/message_entity.dart';
 import 'package:lexora/features/session/domain/entities/session_entity.dart';
 import 'package:lexora/features/session/domain/entities/source_entity.dart';
@@ -72,13 +75,13 @@ class SessionRepositoryImpl extends SessionRepository {
 
   @override
   Future<Either<Failure, SessionEntity>> createSession({
-    required String title,
-    String? description,
+    required String agentType,
+    required String name,
   }) async {
     try {
       final request = CreateSessionRequest(
-        title: title,
-        description: description,
+        agentType: agentType,
+        name: name,
       );
       final session = await datasource.createSession(request);
       return Right(session.toEntity());
@@ -103,17 +106,13 @@ class SessionRepositoryImpl extends SessionRepository {
   }
 
   @override
-  Future<Either<Failure, SessionEntity>> updateSession({
+  Future<Either<Failure, SessionEntity>> updateSessionName({
     required int id,
-    String? title,
-    String? description,
-    String? status,
+    required String name,
   }) async {
     try {
-      final request = UpdateSessionRequest(
-        title: title,
-        description: description,
-        status: status,
+      final request = UpdateSessionNameRequest(
+        name: name,
       );
       final session = await datasource.updateSession(id, request);
       return Right(session.toEntity());
@@ -218,6 +217,35 @@ class SessionRepositoryImpl extends SessionRepository {
     try {
       final artifacts = await datasource.getArtifacts(id);
       return Right(artifacts.toEntity());
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        errorMessage: e.errorMessage,
+        statusCode: e.statusCode,
+      ));
+    } on ParsingException catch (e) {
+      return Left(ParsingFailure(errorMessage: e.errorMessage));
+    } on DioException catch (e) {
+      return Left(ServerFailure(
+        errorMessage: e.message ?? 'Network error occurred',
+        statusCode: e.response?.statusCode ?? 500,
+      ));
+    } catch (e) {
+      return Left(ServerFailure(
+        errorMessage: 'An unexpected error occurred',
+        statusCode: 500,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ChatResponseEntity>> sendChat({
+    required String sessionId,
+    required ChatRequestEntity request,
+  }) async {
+    try {
+      final chatRequest = ChatRequest.fromEntity(request);
+      final response = await datasource.sendChat(sessionId, chatRequest);
+      return Right(response.toEntity());
     } on ServerException catch (e) {
       return Left(ServerFailure(
         errorMessage: e.errorMessage,

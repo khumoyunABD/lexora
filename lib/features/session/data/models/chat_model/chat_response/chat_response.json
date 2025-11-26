@@ -1,0 +1,15 @@
+{
+    "messages": [
+        {
+            "role": "assistant",
+            "content": "Thank you for your message.\n\nPlease provide the specific legal question you would like me to research using the lex.uz legal database. I am ready to assist you with your inquiry regarding the law of Uzbekistan.",
+            "artifacts": [],
+            "metadata": {
+                "sources_used": [],
+                "confidence": 1.0,
+                "processing_time": 3.12
+            }
+        }
+    ],
+    "session_id": "262526bc-eb38-40fa-9d4a-881aeb95d56d"
+}

@@ -1,20 +1,14 @@
 import 'package:equatable/equatable.dart';
 
-class UpdateSessionEntity extends Equatable {
-  final String? title;
-  final String? description;
-  final String? status;
+class UpdateSessionNameEntity extends Equatable {
+  final String name;
 
-  const UpdateSessionEntity({
-    this.title,
-    this.description,
-    this.status,
+  const UpdateSessionNameEntity({
+    required this.name,
   });
 
   @override
   List<Object?> get props => [
-        title,
-        description,
-        status,
+        name,
       ];
 }

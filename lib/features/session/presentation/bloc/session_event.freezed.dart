@@ -20,10 +20,8 @@ mixin _$SessionEvent {
   TResult when<TResult extends Object?>({
     required TResult Function() getSessions,
     required TResult Function(int id) getSessionById,
-    required TResult Function(String title, String? description) createSession,
-    required TResult Function(
-            int id, String? title, String? description, String? status)
-        updateSession,
+    required TResult Function(String agentType, String name) createSession,
+    required TResult Function(int id, String name) updateSessionName,
     required TResult Function(String id) deleteSession,
   }) =>
       throw _privateConstructorUsedError;
@@ -31,10 +29,8 @@ mixin _$SessionEvent {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? getSessions,
     TResult? Function(int id)? getSessionById,
-    TResult? Function(String title, String? description)? createSession,
-    TResult? Function(
-            int id, String? title, String? description, String? status)?
-        updateSession,
+    TResult? Function(String agentType, String name)? createSession,
+    TResult? Function(int id, String name)? updateSessionName,
     TResult? Function(String id)? deleteSession,
   }) =>
       throw _privateConstructorUsedError;
@@ -42,10 +38,8 @@ mixin _$SessionEvent {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? getSessions,
     TResult Function(int id)? getSessionById,
-    TResult Function(String title, String? description)? createSession,
-    TResult Function(
-            int id, String? title, String? description, String? status)?
-        updateSession,
+    TResult Function(String agentType, String name)? createSession,
+    TResult Function(int id, String name)? updateSessionName,
     TResult Function(String id)? deleteSession,
     required TResult orElse(),
   }) =>
@@ -55,7 +49,7 @@ mixin _$SessionEvent {
     required TResult Function(GetSessionsEvent value) getSessions,
     required TResult Function(GetSessionByIdEvent value) getSessionById,
     required TResult Function(CreateSessionEvent value) createSession,
-    required TResult Function(UpdateSessionEvent value) updateSession,
+    required TResult Function(UpdateSessionNameEvent value) updateSessionName,
     required TResult Function(DeleteSessionEvent value) deleteSession,
   }) =>
       throw _privateConstructorUsedError;
@@ -64,7 +58,7 @@ mixin _$SessionEvent {
     TResult? Function(GetSessionsEvent value)? getSessions,
     TResult? Function(GetSessionByIdEvent value)? getSessionById,
     TResult? Function(CreateSessionEvent value)? createSession,
-    TResult? Function(UpdateSessionEvent value)? updateSession,
+    TResult? Function(UpdateSessionNameEvent value)? updateSessionName,
     TResult? Function(DeleteSessionEvent value)? deleteSession,
   }) =>
       throw _privateConstructorUsedError;
@@ -73,7 +67,7 @@ mixin _$SessionEvent {
     TResult Function(GetSessionsEvent value)? getSessions,
     TResult Function(GetSessionByIdEvent value)? getSessionById,
     TResult Function(CreateSessionEvent value)? createSession,
-    TResult Function(UpdateSessionEvent value)? updateSession,
+    TResult Function(UpdateSessionNameEvent value)? updateSessionName,
     TResult Function(DeleteSessionEvent value)? deleteSession,
     required TResult orElse(),
   }) =>
@@ -144,10 +138,8 @@ class _$GetSessionsEventImpl implements GetSessionsEvent {
   TResult when<TResult extends Object?>({
     required TResult Function() getSessions,
     required TResult Function(int id) getSessionById,
-    required TResult Function(String title, String? description) createSession,
-    required TResult Function(
-            int id, String? title, String? description, String? status)
-        updateSession,
+    required TResult Function(String agentType, String name) createSession,
+    required TResult Function(int id, String name) updateSessionName,
     required TResult Function(String id) deleteSession,
   }) {
     return getSessions();
@@ -158,10 +150,8 @@ class _$GetSessionsEventImpl implements GetSessionsEvent {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? getSessions,
     TResult? Function(int id)? getSessionById,
-    TResult? Function(String title, String? description)? createSession,
-    TResult? Function(
-            int id, String? title, String? description, String? status)?
-        updateSession,
+    TResult? Function(String agentType, String name)? createSession,
+    TResult? Function(int id, String name)? updateSessionName,
     TResult? Function(String id)? deleteSession,
   }) {
     return getSessions?.call();
@@ -172,10 +162,8 @@ class _$GetSessionsEventImpl implements GetSessionsEvent {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? getSessions,
     TResult Function(int id)? getSessionById,
-    TResult Function(String title, String? description)? createSession,
-    TResult Function(
-            int id, String? title, String? description, String? status)?
-        updateSession,
+    TResult Function(String agentType, String name)? createSession,
+    TResult Function(int id, String name)? updateSessionName,
     TResult Function(String id)? deleteSession,
     required TResult orElse(),
   }) {
@@ -191,7 +179,7 @@ class _$GetSessionsEventImpl implements GetSessionsEvent {
     required TResult Function(GetSessionsEvent value) getSessions,
     required TResult Function(GetSessionByIdEvent value) getSessionById,
     required TResult Function(CreateSessionEvent value) createSession,
-    required TResult Function(UpdateSessionEvent value) updateSession,
+    required TResult Function(UpdateSessionNameEvent value) updateSessionName,
     required TResult Function(DeleteSessionEvent value) deleteSession,
   }) {
     return getSessions(this);
@@ -203,7 +191,7 @@ class _$GetSessionsEventImpl implements GetSessionsEvent {
     TResult? Function(GetSessionsEvent value)? getSessions,
     TResult? Function(GetSessionByIdEvent value)? getSessionById,
     TResult? Function(CreateSessionEvent value)? createSession,
-    TResult? Function(UpdateSessionEvent value)? updateSession,
+    TResult? Function(UpdateSessionNameEvent value)? updateSessionName,
     TResult? Function(DeleteSessionEvent value)? deleteSession,
   }) {
     return getSessions?.call(this);
@@ -215,7 +203,7 @@ class _$GetSessionsEventImpl implements GetSessionsEvent {
     TResult Function(GetSessionsEvent value)? getSessions,
     TResult Function(GetSessionByIdEvent value)? getSessionById,
     TResult Function(CreateSessionEvent value)? createSession,
-    TResult Function(UpdateSessionEvent value)? updateSession,
+    TResult Function(UpdateSessionNameEvent value)? updateSessionName,
     TResult Function(DeleteSessionEvent value)? deleteSession,
     required TResult orElse(),
   }) {
@@ -301,10 +289,8 @@ class _$GetSessionByIdEventImpl implements GetSessionByIdEvent {
   TResult when<TResult extends Object?>({
     required TResult Function() getSessions,
     required TResult Function(int id) getSessionById,
-    required TResult Function(String title, String? description) createSession,
-    required TResult Function(
-            int id, String? title, String? description, String? status)
-        updateSession,
+    required TResult Function(String agentType, String name) createSession,
+    required TResult Function(int id, String name) updateSessionName,
     required TResult Function(String id) deleteSession,
   }) {
     return getSessionById(id);
@@ -315,10 +301,8 @@ class _$GetSessionByIdEventImpl implements GetSessionByIdEvent {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? getSessions,
     TResult? Function(int id)? getSessionById,
-    TResult? Function(String title, String? description)? createSession,
-    TResult? Function(
-            int id, String? title, String? description, String? status)?
-        updateSession,
+    TResult? Function(String agentType, String name)? createSession,
+    TResult? Function(int id, String name)? updateSessionName,
     TResult? Function(String id)? deleteSession,
   }) {
     return getSessionById?.call(id);
@@ -329,10 +313,8 @@ class _$GetSessionByIdEventImpl implements GetSessionByIdEvent {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? getSessions,
     TResult Function(int id)? getSessionById,
-    TResult Function(String title, String? description)? createSession,
-    TResult Function(
-            int id, String? title, String? description, String? status)?
-        updateSession,
+    TResult Function(String agentType, String name)? createSession,
+    TResult Function(int id, String name)? updateSessionName,
     TResult Function(String id)? deleteSession,
     required TResult orElse(),
   }) {
@@ -348,7 +330,7 @@ class _$GetSessionByIdEventImpl implements GetSessionByIdEvent {
     required TResult Function(GetSessionsEvent value) getSessions,
     required TResult Function(GetSessionByIdEvent value) getSessionById,
     required TResult Function(CreateSessionEvent value) createSession,
-    required TResult Function(UpdateSessionEvent value) updateSession,
+    required TResult Function(UpdateSessionNameEvent value) updateSessionName,
     required TResult Function(DeleteSessionEvent value) deleteSession,
   }) {
     return getSessionById(this);
@@ -360,7 +342,7 @@ class _$GetSessionByIdEventImpl implements GetSessionByIdEvent {
     TResult? Function(GetSessionsEvent value)? getSessions,
     TResult? Function(GetSessionByIdEvent value)? getSessionById,
     TResult? Function(CreateSessionEvent value)? createSession,
-    TResult? Function(UpdateSessionEvent value)? updateSession,
+    TResult? Function(UpdateSessionNameEvent value)? updateSessionName,
     TResult? Function(DeleteSessionEvent value)? deleteSession,
   }) {
     return getSessionById?.call(this);
@@ -372,7 +354,7 @@ class _$GetSessionByIdEventImpl implements GetSessionByIdEvent {
     TResult Function(GetSessionsEvent value)? getSessions,
     TResult Function(GetSessionByIdEvent value)? getSessionById,
     TResult Function(CreateSessionEvent value)? createSession,
-    TResult Function(UpdateSessionEvent value)? updateSession,
+    TResult Function(UpdateSessionNameEvent value)? updateSessionName,
     TResult Function(DeleteSessionEvent value)? deleteSession,
     required TResult orElse(),
   }) {
@@ -402,7 +384,7 @@ abstract class _$$CreateSessionEventImplCopyWith<$Res> {
           $Res Function(_$CreateSessionEventImpl) then) =
       __$$CreateSessionEventImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String title, String? description});
+  $Res call({String agentType, String name});
 }
 
 /// @nodoc
@@ -418,18 +400,18 @@ class __$$CreateSessionEventImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? title = null,
-    Object? description = freezed,
+    Object? agentType = null,
+    Object? name = null,
   }) {
     return _then(_$CreateSessionEventImpl(
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
+      agentType: null == agentType
+          ? _value.agentType
+          : agentType // ignore: cast_nullable_to_non_nullable
               as String,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -437,16 +419,16 @@ class __$$CreateSessionEventImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$CreateSessionEventImpl implements CreateSessionEvent {
-  const _$CreateSessionEventImpl({required this.title, this.description});
+  const _$CreateSessionEventImpl({required this.agentType, required this.name});
 
   @override
-  final String title;
+  final String agentType;
   @override
-  final String? description;
+  final String name;
 
   @override
   String toString() {
-    return 'SessionEvent.createSession(title: $title, description: $description)';
+    return 'SessionEvent.createSession(agentType: $agentType, name: $name)';
   }
 
   @override
@@ -454,13 +436,13 @@ class _$CreateSessionEventImpl implements CreateSessionEvent {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CreateSessionEventImpl &&
-            (identical(other.title, title) || other.title == title) &&
-            (identical(other.description, description) ||
-                other.description == description));
+            (identical(other.agentType, agentType) ||
+                other.agentType == agentType) &&
+            (identical(other.name, name) || other.name == name));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, title, description);
+  int get hashCode => Object.hash(runtimeType, agentType, name);
 
   /// Create a copy of SessionEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -476,13 +458,11 @@ class _$CreateSessionEventImpl implements CreateSessionEvent {
   TResult when<TResult extends Object?>({
     required TResult Function() getSessions,
     required TResult Function(int id) getSessionById,
-    required TResult Function(String title, String? description) createSession,
-    required TResult Function(
-            int id, String? title, String? description, String? status)
-        updateSession,
+    required TResult Function(String agentType, String name) createSession,
+    required TResult Function(int id, String name) updateSessionName,
     required TResult Function(String id) deleteSession,
   }) {
-    return createSession(title, description);
+    return createSession(agentType, name);
   }
 
   @override
@@ -490,13 +470,11 @@ class _$CreateSessionEventImpl implements CreateSessionEvent {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? getSessions,
     TResult? Function(int id)? getSessionById,
-    TResult? Function(String title, String? description)? createSession,
-    TResult? Function(
-            int id, String? title, String? description, String? status)?
-        updateSession,
+    TResult? Function(String agentType, String name)? createSession,
+    TResult? Function(int id, String name)? updateSessionName,
     TResult? Function(String id)? deleteSession,
   }) {
-    return createSession?.call(title, description);
+    return createSession?.call(agentType, name);
   }
 
   @override
@@ -504,15 +482,13 @@ class _$CreateSessionEventImpl implements CreateSessionEvent {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? getSessions,
     TResult Function(int id)? getSessionById,
-    TResult Function(String title, String? description)? createSession,
-    TResult Function(
-            int id, String? title, String? description, String? status)?
-        updateSession,
+    TResult Function(String agentType, String name)? createSession,
+    TResult Function(int id, String name)? updateSessionName,
     TResult Function(String id)? deleteSession,
     required TResult orElse(),
   }) {
     if (createSession != null) {
-      return createSession(title, description);
+      return createSession(agentType, name);
     }
     return orElse();
   }
@@ -523,7 +499,7 @@ class _$CreateSessionEventImpl implements CreateSessionEvent {
     required TResult Function(GetSessionsEvent value) getSessions,
     required TResult Function(GetSessionByIdEvent value) getSessionById,
     required TResult Function(CreateSessionEvent value) createSession,
-    required TResult Function(UpdateSessionEvent value) updateSession,
+    required TResult Function(UpdateSessionNameEvent value) updateSessionName,
     required TResult Function(DeleteSessionEvent value) deleteSession,
   }) {
     return createSession(this);
@@ -535,7 +511,7 @@ class _$CreateSessionEventImpl implements CreateSessionEvent {
     TResult? Function(GetSessionsEvent value)? getSessions,
     TResult? Function(GetSessionByIdEvent value)? getSessionById,
     TResult? Function(CreateSessionEvent value)? createSession,
-    TResult? Function(UpdateSessionEvent value)? updateSession,
+    TResult? Function(UpdateSessionNameEvent value)? updateSessionName,
     TResult? Function(DeleteSessionEvent value)? deleteSession,
   }) {
     return createSession?.call(this);
@@ -547,7 +523,7 @@ class _$CreateSessionEventImpl implements CreateSessionEvent {
     TResult Function(GetSessionsEvent value)? getSessions,
     TResult Function(GetSessionByIdEvent value)? getSessionById,
     TResult Function(CreateSessionEvent value)? createSession,
-    TResult Function(UpdateSessionEvent value)? updateSession,
+    TResult Function(UpdateSessionNameEvent value)? updateSessionName,
     TResult Function(DeleteSessionEvent value)? deleteSession,
     required TResult orElse(),
   }) {
@@ -560,11 +536,11 @@ class _$CreateSessionEventImpl implements CreateSessionEvent {
 
 abstract class CreateSessionEvent implements SessionEvent {
   const factory CreateSessionEvent(
-      {required final String title,
-      final String? description}) = _$CreateSessionEventImpl;
+      {required final String agentType,
+      required final String name}) = _$CreateSessionEventImpl;
 
-  String get title;
-  String? get description;
+  String get agentType;
+  String get name;
 
   /// Create a copy of SessionEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -574,20 +550,22 @@ abstract class CreateSessionEvent implements SessionEvent {
 }
 
 /// @nodoc
-abstract class _$$UpdateSessionEventImplCopyWith<$Res> {
-  factory _$$UpdateSessionEventImplCopyWith(_$UpdateSessionEventImpl value,
-          $Res Function(_$UpdateSessionEventImpl) then) =
-      __$$UpdateSessionEventImplCopyWithImpl<$Res>;
+abstract class _$$UpdateSessionNameEventImplCopyWith<$Res> {
+  factory _$$UpdateSessionNameEventImplCopyWith(
+          _$UpdateSessionNameEventImpl value,
+          $Res Function(_$UpdateSessionNameEventImpl) then) =
+      __$$UpdateSessionNameEventImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({int id, String? title, String? description, String? status});
+  $Res call({int id, String name});
 }
 
 /// @nodoc
-class __$$UpdateSessionEventImplCopyWithImpl<$Res>
-    extends _$SessionEventCopyWithImpl<$Res, _$UpdateSessionEventImpl>
-    implements _$$UpdateSessionEventImplCopyWith<$Res> {
-  __$$UpdateSessionEventImplCopyWithImpl(_$UpdateSessionEventImpl _value,
-      $Res Function(_$UpdateSessionEventImpl) _then)
+class __$$UpdateSessionNameEventImplCopyWithImpl<$Res>
+    extends _$SessionEventCopyWithImpl<$Res, _$UpdateSessionNameEventImpl>
+    implements _$$UpdateSessionNameEventImplCopyWith<$Res> {
+  __$$UpdateSessionNameEventImplCopyWithImpl(
+      _$UpdateSessionNameEventImpl _value,
+      $Res Function(_$UpdateSessionNameEventImpl) _then)
       : super(_value, _then);
 
   /// Create a copy of SessionEvent
@@ -596,87 +574,67 @@ class __$$UpdateSessionEventImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? title = freezed,
-    Object? description = freezed,
-    Object? status = freezed,
+    Object? name = null,
   }) {
-    return _then(_$UpdateSessionEventImpl(
+    return _then(_$UpdateSessionNameEventImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      title: freezed == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String?,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
-      status: freezed == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as String?,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
 
 /// @nodoc
 
-class _$UpdateSessionEventImpl implements UpdateSessionEvent {
-  const _$UpdateSessionEventImpl(
-      {required this.id, this.title, this.description, this.status});
+class _$UpdateSessionNameEventImpl implements UpdateSessionNameEvent {
+  const _$UpdateSessionNameEventImpl({required this.id, required this.name});
 
   @override
   final int id;
   @override
-  final String? title;
-  @override
-  final String? description;
-  @override
-  final String? status;
+  final String name;
 
   @override
   String toString() {
-    return 'SessionEvent.updateSession(id: $id, title: $title, description: $description, status: $status)';
+    return 'SessionEvent.updateSessionName(id: $id, name: $name)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$UpdateSessionEventImpl &&
+            other is _$UpdateSessionNameEventImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.title, title) || other.title == title) &&
-            (identical(other.description, description) ||
-                other.description == description) &&
-            (identical(other.status, status) || other.status == status));
+            (identical(other.name, name) || other.name == name));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, title, description, status);
+  int get hashCode => Object.hash(runtimeType, id, name);
 
   /// Create a copy of SessionEvent
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$UpdateSessionEventImplCopyWith<_$UpdateSessionEventImpl> get copyWith =>
-      __$$UpdateSessionEventImplCopyWithImpl<_$UpdateSessionEventImpl>(
-          this, _$identity);
+  _$$UpdateSessionNameEventImplCopyWith<_$UpdateSessionNameEventImpl>
+      get copyWith => __$$UpdateSessionNameEventImplCopyWithImpl<
+          _$UpdateSessionNameEventImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() getSessions,
     required TResult Function(int id) getSessionById,
-    required TResult Function(String title, String? description) createSession,
-    required TResult Function(
-            int id, String? title, String? description, String? status)
-        updateSession,
+    required TResult Function(String agentType, String name) createSession,
+    required TResult Function(int id, String name) updateSessionName,
     required TResult Function(String id) deleteSession,
   }) {
-    return updateSession(id, title, description, status);
+    return updateSessionName(id, name);
   }
 
   @override
@@ -684,13 +642,11 @@ class _$UpdateSessionEventImpl implements UpdateSessionEvent {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? getSessions,
     TResult? Function(int id)? getSessionById,
-    TResult? Function(String title, String? description)? createSession,
-    TResult? Function(
-            int id, String? title, String? description, String? status)?
-        updateSession,
+    TResult? Function(String agentType, String name)? createSession,
+    TResult? Function(int id, String name)? updateSessionName,
     TResult? Function(String id)? deleteSession,
   }) {
-    return updateSession?.call(id, title, description, status);
+    return updateSessionName?.call(id, name);
   }
 
   @override
@@ -698,15 +654,13 @@ class _$UpdateSessionEventImpl implements UpdateSessionEvent {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? getSessions,
     TResult Function(int id)? getSessionById,
-    TResult Function(String title, String? description)? createSession,
-    TResult Function(
-            int id, String? title, String? description, String? status)?
-        updateSession,
+    TResult Function(String agentType, String name)? createSession,
+    TResult Function(int id, String name)? updateSessionName,
     TResult Function(String id)? deleteSession,
     required TResult orElse(),
   }) {
-    if (updateSession != null) {
-      return updateSession(id, title, description, status);
+    if (updateSessionName != null) {
+      return updateSessionName(id, name);
     }
     return orElse();
   }
@@ -717,10 +671,10 @@ class _$UpdateSessionEventImpl implements UpdateSessionEvent {
     required TResult Function(GetSessionsEvent value) getSessions,
     required TResult Function(GetSessionByIdEvent value) getSessionById,
     required TResult Function(CreateSessionEvent value) createSession,
-    required TResult Function(UpdateSessionEvent value) updateSession,
+    required TResult Function(UpdateSessionNameEvent value) updateSessionName,
     required TResult Function(DeleteSessionEvent value) deleteSession,
   }) {
-    return updateSession(this);
+    return updateSessionName(this);
   }
 
   @override
@@ -729,10 +683,10 @@ class _$UpdateSessionEventImpl implements UpdateSessionEvent {
     TResult? Function(GetSessionsEvent value)? getSessions,
     TResult? Function(GetSessionByIdEvent value)? getSessionById,
     TResult? Function(CreateSessionEvent value)? createSession,
-    TResult? Function(UpdateSessionEvent value)? updateSession,
+    TResult? Function(UpdateSessionNameEvent value)? updateSessionName,
     TResult? Function(DeleteSessionEvent value)? deleteSession,
   }) {
-    return updateSession?.call(this);
+    return updateSessionName?.call(this);
   }
 
   @override
@@ -741,34 +695,30 @@ class _$UpdateSessionEventImpl implements UpdateSessionEvent {
     TResult Function(GetSessionsEvent value)? getSessions,
     TResult Function(GetSessionByIdEvent value)? getSessionById,
     TResult Function(CreateSessionEvent value)? createSession,
-    TResult Function(UpdateSessionEvent value)? updateSession,
+    TResult Function(UpdateSessionNameEvent value)? updateSessionName,
     TResult Function(DeleteSessionEvent value)? deleteSession,
     required TResult orElse(),
   }) {
-    if (updateSession != null) {
-      return updateSession(this);
+    if (updateSessionName != null) {
+      return updateSessionName(this);
     }
     return orElse();
   }
 }
 
-abstract class UpdateSessionEvent implements SessionEvent {
-  const factory UpdateSessionEvent(
+abstract class UpdateSessionNameEvent implements SessionEvent {
+  const factory UpdateSessionNameEvent(
       {required final int id,
-      final String? title,
-      final String? description,
-      final String? status}) = _$UpdateSessionEventImpl;
+      required final String name}) = _$UpdateSessionNameEventImpl;
 
   int get id;
-  String? get title;
-  String? get description;
-  String? get status;
+  String get name;
 
   /// Create a copy of SessionEvent
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$UpdateSessionEventImplCopyWith<_$UpdateSessionEventImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$UpdateSessionNameEventImplCopyWith<_$UpdateSessionNameEventImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -842,10 +792,8 @@ class _$DeleteSessionEventImpl implements DeleteSessionEvent {
   TResult when<TResult extends Object?>({
     required TResult Function() getSessions,
     required TResult Function(int id) getSessionById,
-    required TResult Function(String title, String? description) createSession,
-    required TResult Function(
-            int id, String? title, String? description, String? status)
-        updateSession,
+    required TResult Function(String agentType, String name) createSession,
+    required TResult Function(int id, String name) updateSessionName,
     required TResult Function(String id) deleteSession,
   }) {
     return deleteSession(id);
@@ -856,10 +804,8 @@ class _$DeleteSessionEventImpl implements DeleteSessionEvent {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? getSessions,
     TResult? Function(int id)? getSessionById,
-    TResult? Function(String title, String? description)? createSession,
-    TResult? Function(
-            int id, String? title, String? description, String? status)?
-        updateSession,
+    TResult? Function(String agentType, String name)? createSession,
+    TResult? Function(int id, String name)? updateSessionName,
     TResult? Function(String id)? deleteSession,
   }) {
     return deleteSession?.call(id);
@@ -870,10 +816,8 @@ class _$DeleteSessionEventImpl implements DeleteSessionEvent {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? getSessions,
     TResult Function(int id)? getSessionById,
-    TResult Function(String title, String? description)? createSession,
-    TResult Function(
-            int id, String? title, String? description, String? status)?
-        updateSession,
+    TResult Function(String agentType, String name)? createSession,
+    TResult Function(int id, String name)? updateSessionName,
     TResult Function(String id)? deleteSession,
     required TResult orElse(),
   }) {
@@ -889,7 +833,7 @@ class _$DeleteSessionEventImpl implements DeleteSessionEvent {
     required TResult Function(GetSessionsEvent value) getSessions,
     required TResult Function(GetSessionByIdEvent value) getSessionById,
     required TResult Function(CreateSessionEvent value) createSession,
-    required TResult Function(UpdateSessionEvent value) updateSession,
+    required TResult Function(UpdateSessionNameEvent value) updateSessionName,
     required TResult Function(DeleteSessionEvent value) deleteSession,
   }) {
     return deleteSession(this);
@@ -901,7 +845,7 @@ class _$DeleteSessionEventImpl implements DeleteSessionEvent {
     TResult? Function(GetSessionsEvent value)? getSessions,
     TResult? Function(GetSessionByIdEvent value)? getSessionById,
     TResult? Function(CreateSessionEvent value)? createSession,
-    TResult? Function(UpdateSessionEvent value)? updateSession,
+    TResult? Function(UpdateSessionNameEvent value)? updateSessionName,
     TResult? Function(DeleteSessionEvent value)? deleteSession,
   }) {
     return deleteSession?.call(this);
@@ -913,7 +857,7 @@ class _$DeleteSessionEventImpl implements DeleteSessionEvent {
     TResult Function(GetSessionsEvent value)? getSessions,
     TResult Function(GetSessionByIdEvent value)? getSessionById,
     TResult Function(CreateSessionEvent value)? createSession,
-    TResult Function(UpdateSessionEvent value)? updateSession,
+    TResult Function(UpdateSessionNameEvent value)? updateSessionName,
     TResult Function(DeleteSessionEvent value)? deleteSession,
     required TResult orElse(),
   }) {

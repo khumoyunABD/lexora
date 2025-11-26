@@ -37,11 +37,12 @@ class ChatTopBar extends StatelessWidget {
             ),
           ),
           sessionId == null
-              ? IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.chat_bubble_outline),
-                  tooltip: 'Temporary chat',
-                )
+              ? SizedBox()
+              // IconButton(
+              //     onPressed: () {},
+              //     icon: const Icon(Icons.chat_bubble_outline),
+              //     tooltip: 'Temporary chat',
+              //   )
               : PopupMenuButton<String>(
                   color: const Color(0xFF1E1E1E),
                   shape: RoundedRectangleBorder(

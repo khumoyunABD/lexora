@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lexora/core/exceptions/failures.dart';
 import 'package:lexora/features/session/domain/entities/artifact_entity.dart';
+import 'package:lexora/features/session/domain/entities/chat_response_entity.dart';
 import 'package:lexora/features/session/domain/entities/message_entity.dart';
 import 'package:lexora/features/session/domain/entities/source_entity.dart';
 
@@ -23,6 +24,10 @@ class SessionDetailsState with _$SessionDetailsState {
   const factory SessionDetailsState.artifactsLoaded({
     required ArtifactsResponseEntity artifacts,
   }) = ArtifactsLoaded;
+
+  const factory SessionDetailsState.chatSent({
+    required ChatResponseEntity response,
+  }) = ChatSent;
 
   const factory SessionDetailsState.error({
     required Failure failure,

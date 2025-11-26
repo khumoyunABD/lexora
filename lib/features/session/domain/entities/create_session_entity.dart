@@ -1,17 +1,17 @@
 import 'package:equatable/equatable.dart';
 
 class CreateSessionEntity extends Equatable {
-  final String title;
-  final String? description;
+  final String agentType;
+  final String name;
 
   const CreateSessionEntity({
-    required this.title,
-    this.description,
+    required this.agentType,
+    required this.name,
   });
 
   @override
   List<Object?> get props => [
-        title,
-        description,
+        agentType,
+        name,
       ];
 }

@@ -123,9 +123,9 @@ class _SessionApiService implements SessionApiService {
   }
 
   @override
-  Future<SessionModel> updateSession(
+  Future<SessionModel> updateSessionName(
     int id,
-    UpdateSessionRequest request,
+    UpdateSessionNameRequest request,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -138,7 +138,7 @@ class _SessionApiService implements SessionApiService {
     )
         .compose(
           _dio.options,
-          'agents/sessions/${id}',
+          'agents/sessions/${id}/name',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -275,6 +275,42 @@ class _SessionApiService implements SessionApiService {
     late ArtifactsResponse _value;
     try {
       _value = ArtifactsResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ChatResponse> sendChat(
+    String id,
+    ChatRequest chatRequest,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = chatRequest;
+    final _options = _setStreamType<ChatResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'agents/research/sessions/${id}/chat',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ChatResponse _value;
+    try {
+      _value = ChatResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

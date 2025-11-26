@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lexora/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:lexora/features/auth/presentation/bloc/auth_event.dart';
+import 'package:lexora/features/auth/presentation/bloc/auth_state.dart';
 import 'package:lexora/features/session/presentation/bloc/session_bloc.dart';
 import 'package:lexora/features/session/presentation/bloc/session_event.dart';
 import 'package:lexora/features/session/presentation/bloc/session_state.dart';
@@ -18,6 +21,8 @@ class SideDrawer extends StatefulWidget {
 }
 
 class _SideDrawerState extends State<SideDrawer> {
+  bool _isUserMenuExpanded = false;
+
   @override
   void initState() {
     super.initState();
@@ -29,156 +34,189 @@ class _SideDrawerState extends State<SideDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      backgroundColor: Colors.black,
-      child: SafeArea(
-        child: Column(
-          children: [
-            // Search bar and close button
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF2A2A2A),
-                        borderRadius: BorderRadius.circular(28),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.search,
-                            color: Colors.white.withValues(alpha: 0.6),
-                            size: 24,
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: TextField(
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                              ),
-                              decoration: InputDecoration(
-                                hintText: 'Search',
-                                hintStyle: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.4),
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          unauthenticated: () {
+            // Navigate to login page
+            context.go(PagePath.login);
+          },
+          orElse: () {},
+        );
+      },
+      child: Drawer(
+        backgroundColor: Colors.black,
+        child: SafeArea(
+          child: Column(
+            children: [
+              // Search bar and close button
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF2A2A2A),
+                          borderRadius: BorderRadius.circular(28),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.search,
+                              color: Colors.white.withValues(alpha: 0.6),
+                              size: 24,
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: TextField(
+                                style: const TextStyle(
+                                  color: Colors.white,
                                   fontSize: 16,
                                 ),
-                                border: InputBorder.none,
-                                contentPadding:
-                                    const EdgeInsets.symmetric(vertical: 16),
+                                decoration: InputDecoration(
+                                  hintText: 'Search',
+                                  hintStyle: TextStyle(
+                                    color: Colors.white.withValues(alpha: 0.4),
+                                    fontSize: 16,
+                                  ),
+                                  border: InputBorder.none,
+                                  contentPadding:
+                                      const EdgeInsets.symmetric(vertical: 16),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  // GestureDetector(
-                  //   onTap: () => Navigator.pop(context),
-                  //   child: Container(
-                  //     width: 48,
-                  //     height: 48,
-                  //     decoration: BoxDecoration(
-                  //       color: const Color(0xFF2A2A2A),
-                  //       borderRadius: BorderRadius.circular(24),
-                  //     ),
-                  //     child: const Icon(
-                  //       Icons.menu,
-                  //       color: Colors.white,
-                  //       size: 24,
-                  //     ),
-                  //   ),
-                  // ),
-                ],
+                    const SizedBox(width: 12),
+                    // GestureDetector(
+                    //   onTap: () => Navigator.pop(context),
+                    //   child: Container(
+                    //     width: 48,
+                    //     height: 48,
+                    //     decoration: BoxDecoration(
+                    //       color: const Color(0xFF2A2A2A),
+                    //       borderRadius: BorderRadius.circular(24),
+                    //     ),
+                    //     child: const Icon(
+                    //       Icons.menu,
+                    //       color: Colors.white,
+                    //       size: 24,
+                    //     ),
+                    //   ),
+                    // ),
+                  ],
+                ),
               ),
-            ),
-            // Menu items
-            Expanded(
-              child: BlocBuilder<SessionBloc, SessionState>(
-                builder: (context, state) {
-                  return ListView(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    children: [
-                      _buildMenuItem(
-                        icon: Icons.edit_outlined,
-                        label: 'New chat',
-                        onTap: () {
-                          // Navigator.pop(context);
-                          context.go(PagePath.home);
-                        },
-                      ),
+              // Menu items
+              Expanded(
+                child: BlocBuilder<SessionBloc, SessionState>(
+                  builder: (context, state) {
+                    return ListView(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      children: [
+                        _buildMenuItem(
+                          icon: Icons.edit_outlined,
+                          label: 'New chat',
+                          onTap: () {
+                            Navigator.pop(context);
+                            context.go(PagePath.home);
+                          },
+                        ),
 
-                      SizedBox(height: 8.h),
-                      _buildMenuItem(
-                        icon: Icons.create_new_folder_outlined,
-                        label: 'New project',
+                        SizedBox(height: 8.h),
+                        _buildMenuItem(
+                          icon: Icons.create_new_folder_outlined,
+                          label: 'New project',
+                        ),
+                        SizedBox(height: 16.h),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: Divider(color: Color(0xFF2A2A2A), height: 1),
+                        ),
+                        // Session history
+                        state.when(
+                          initial: () => const SizedBox.shrink(),
+                          loading: () => _buildLoadingState(),
+                          sessionsLoaded: (sessions) {
+                            if (sessions.isEmpty) {
+                              return _buildEmptyState();
+                            }
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: sessions
+                                  .map((session) => _buildChatHistoryItem(
+                                      session.name, session.id))
+                                  .toList(),
+                            );
+                          },
+                          sessionLoaded: (_) => const SizedBox.shrink(),
+                          sessionCreated: (_) => const SizedBox.shrink(),
+                          sessionUpdated: (_) => const SizedBox.shrink(),
+                          sessionDeleted: () => const SizedBox.shrink(),
+                          sessionEnded: (_) => const SizedBox.shrink(),
+                          error: (failure) => _buildErrorState(
+                              failure.errorMessage ?? 'Unknown error'),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+              // User profile at bottom
+              BlocBuilder<UserBloc, UserState>(
+                builder: (context, state) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          border: Border(
+                            top: BorderSide(
+                              color: Colors.white.withValues(alpha: 0.1),
+                              width: 1,
+                            ),
+                          ),
+                        ),
+                        child: state.when(
+                          initial: () => _buildUserProfile('Loading...', 'L'),
+                          loading: () => _buildUserProfile('Loading...', 'L'),
+                          loaded: (user) => _buildUserProfile(
+                            user.email,
+                            _getInitials(user.email),
+                          ),
+                          error: (failure) => _buildUserProfile(
+                            'Error loading user',
+                            'E',
+                          ),
+                        ),
                       ),
-                      SizedBox(height: 16.h),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8),
-                        child: Divider(color: Color(0xFF2A2A2A), height: 1),
-                      ),
-                      // Session history
-                      state.when(
-                        initial: () => const SizedBox.shrink(),
-                        loading: () => _buildLoadingState(),
-                        sessionsLoaded: (sessions) {
-                          if (sessions.isEmpty) {
-                            return _buildEmptyState();
-                          }
-                          return Column(
-                            children: sessions
-                                .map((session) => _buildChatHistoryItem(
-                                    session.name, session.id))
-                                .toList(),
-                          );
-                        },
-                        sessionLoaded: (_) => const SizedBox.shrink(),
-                        sessionCreated: (_) => const SizedBox.shrink(),
-                        sessionUpdated: (_) => const SizedBox.shrink(),
-                        sessionDeleted: () => const SizedBox.shrink(),
-                        sessionEnded: (_) => const SizedBox.shrink(),
-                        error: (failure) => _buildErrorState(
-                            failure.errorMessage ?? 'Unknown error'),
-                      ),
+                      // Logout button that appears when menu is expanded
+                      if (_isUserMenuExpanded)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          child: _buildMenuItem(
+                            icon: Icons.logout,
+                            iconAndLabelColor: Colors.red,
+                            label: 'Logout',
+                            onTap: () {
+                              _handleLogout(context);
+                            },
+                          ),
+                        ),
                     ],
                   );
                 },
               ),
-            ),
-            // User profile at bottom
-            BlocBuilder<UserBloc, UserState>(
-              builder: (context, state) {
-                return Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      top: BorderSide(
-                        color: Colors.white.withValues(alpha: 0.1),
-                        width: 1,
-                      ),
-                    ),
-                  ),
-                  child: state.when(
-                    initial: () => _buildUserProfile('Loading...', 'L'),
-                    loading: () => _buildUserProfile('Loading...', 'L'),
-                    loaded: (user) => _buildUserProfile(
-                      user.email,
-                      _getInitials(user.email),
-                    ),
-                    error: (failure) => _buildUserProfile(
-                      'Error loading user',
-                      'E',
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -188,6 +226,7 @@ class _SideDrawerState extends State<SideDrawer> {
     required IconData icon,
     required String label,
     VoidCallback? onTap,
+    Color? iconAndLabelColor,
   }) {
     return GestureDetector(
       onTap: onTap,
@@ -197,14 +236,14 @@ class _SideDrawerState extends State<SideDrawer> {
           children: [
             Icon(
               icon,
-              color: Colors.white,
+              color: iconAndLabelColor ?? Colors.white,
               size: 24,
             ),
             const SizedBox(width: 16),
             Text(
               label,
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: iconAndLabelColor ?? Colors.white,
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
               ),
@@ -238,44 +277,96 @@ class _SideDrawerState extends State<SideDrawer> {
   }
 
   Widget _buildUserProfile(String email, String initials) {
-    return Row(
-      children: [
-        Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: const Color(0xFF00BFA5),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Center(
-            child: Text(
-              initials,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _isUserMenuExpanded = !_isUserMenuExpanded;
+        });
+      },
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: const Color(0xFF00BFA5),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Center(
+              child: Text(
+                initials,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Text(
-            email,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              email,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+              overflow: TextOverflow.ellipsis,
             ),
-            overflow: TextOverflow.ellipsis,
           ),
+          AnimatedRotation(
+            turns: _isUserMenuExpanded ? 0.5 : 0,
+            duration: const Duration(milliseconds: 200),
+            child: Icon(
+              Icons.keyboard_arrow_down,
+              color: Colors.white.withValues(alpha: 0.6),
+              size: 24,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _handleLogout(BuildContext context) {
+    // Show confirmation dialog
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: const Color(0xFF1E1E1E),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
         ),
-        Icon(
-          Icons.keyboard_arrow_down,
-          color: Colors.white.withValues(alpha: 0.6),
-          size: 24,
+        title: const Text(
+          'Logout',
+          style: TextStyle(color: Colors.white),
         ),
-      ],
+        content: const Text(
+          'Are you sure you want to logout?',
+          style: TextStyle(color: Colors.white70),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: Colors.white70),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(dialogContext);
+              // Dispatch logout event
+              context.read<AuthBloc>().add(const AuthEvent.logout());
+            },
+            child: const Text(
+              'Logout',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

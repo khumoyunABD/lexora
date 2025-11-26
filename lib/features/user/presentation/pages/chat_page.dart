@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lexora/features/session/domain/entities/artifact_entity.dart';
+import 'package:lexora/features/session/domain/entities/chat_request_entity.dart';
 import 'package:lexora/features/session/domain/entities/message_entity.dart';
 import 'package:lexora/features/session/domain/entities/source_entity.dart';
 import 'package:lexora/features/session/presentation/bloc/session_bloc.dart';
@@ -17,6 +18,7 @@ import 'package:lexora/features/user/presentation/pages/widgets/artifacts_bottom
 import 'package:lexora/features/user/presentation/pages/widgets/chat_input_bar.dart';
 import 'package:lexora/features/user/presentation/pages/widgets/chat_top_bar.dart';
 import 'package:lexora/features/user/presentation/pages/widgets/message_bubble.dart';
+import 'package:lexora/utils/helpers/router.dart';
 
 class ChatPage extends StatefulWidget {
   ChatPage({
@@ -48,11 +50,45 @@ class _ChatPageState extends State<ChatPage> {
   final TTSHelper _ttsHelper = TTSHelper();
   int? _playingMessageIndex;
 
+  // Message polling
+  // late final MessagePollingService _pollingService;
+  // StreamSubscription? _pollingSubscription;
+
+  // Track if this is the first load
+  // bool _isFirstLoad = true;
+
+  // Track if user is at bottom
+  bool _showScrollToBottom = false;
+
+  // Track sending state
+  bool _isSendingMessage = false;
+
+  // Store pending message when creating a new session
+  String? _pendingMessage;
+
   @override
   void initState() {
     super.initState();
+    // _pollingService = MessagePollingService(di<SessionDatasource>());
     _fetchSessionData();
+    // _startPolling();
     _initializeTts();
+    _setupScrollListener();
+  }
+
+  void _setupScrollListener() {
+    _scrollController.addListener(() {
+      if (_scrollController.hasClients) {
+        final isAtBottom = _scrollController.offset >=
+            _scrollController.position.maxScrollExtent - 100;
+
+        if (isAtBottom != !_showScrollToBottom) {
+          setState(() {
+            _showScrollToBottom = !isAtBottom;
+          });
+        }
+      }
+    });
   }
 
   void _initializeTts() async {
@@ -69,10 +105,35 @@ class _ChatPageState extends State<ChatPage> {
   void didUpdateWidget(ChatPage oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.sessionId != widget.sessionId) {
-      _messages = [];
-      _messageFeedback.clear();
-      _copiedStates.clear();
-      _fetchSessionData();
+      // If we're creating a new session with a pending message,
+      // preserve the optimistic UI - don't clear messages or fetch data
+      if (_pendingMessage != null &&
+          widget.sessionId != null &&
+          widget.sessionId!.isNotEmpty) {
+        // We're in the middle of creating a session with a message
+        // The pending message will be sent via _sendPendingMessage
+        // Don't interfere with the optimistic UI
+        return;
+      }
+
+      // Reset local state
+      setState(() {
+        _messages = [];
+        _sources = [];
+        _artifacts = [];
+        _messageFeedback.clear();
+        _copiedStates.clear();
+      });
+
+      // If navigating to new chat (no sessionId), reset the bloc
+      if (widget.sessionId == null || widget.sessionId!.isEmpty) {
+        context.read<SessionDetailsBloc>().add(
+              const SessionDetailsEvent.reset(),
+            );
+      } else {
+        // Otherwise fetch the new session's data
+        _fetchSessionData();
+      }
     }
   }
 
@@ -89,6 +150,54 @@ class _ChatPageState extends State<ChatPage> {
           .add(SessionDetailsEvent.getSources(sessionId: widget.sessionId!));
     }
   }
+
+  // void _startPolling() {
+  //   if (widget.sessionId != null && widget.sessionId!.isNotEmpty) {
+  //     _pollingSubscription?.cancel();
+
+  //     // Start polling with 5 second interval
+  //     final stream = _pollingService.startPolling(
+  //       widget.sessionId!,
+  //       interval: const Duration(seconds: 5),
+  //     );
+
+  //     _pollingSubscription = stream.listen((messageResponse) {
+  //       // Update messages when new data arrives
+  //       if (mounted) {
+  //         final newMessages =
+  //             messageResponse.messages.map((m) => m.toEntity()).toList();
+
+  //         setState(() {
+  //           _messages = newMessages;
+  //         });
+
+  //         // No auto-scrolling during polling - user controls scrolling manually
+  //       }
+  //     });
+  //   }
+  // }
+
+  void _scrollToBottom({bool animate = true}) {
+    // Wait for the UI to render the new messages
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        if (animate) {
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+          );
+        } else {
+          _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+        }
+      }
+    });
+  }
+
+  // void _stopPolling() {
+  //   _pollingSubscription?.cancel();
+  //   _pollingService.stopPolling();
+  // }
 
   void _handleMenuAction(String action) {
     switch (action) {
@@ -108,6 +217,7 @@ class _ChatPageState extends State<ChatPage> {
 
   void _showArtifactsBottomSheet() {
     if (_artifacts.isEmpty) {
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           behavior: SnackBarBehavior.floating,
@@ -128,6 +238,7 @@ class _ChatPageState extends State<ChatPage> {
 
   void _handleBookmark() {
     // TODO: Implement bookmark functionality
+    ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Session bookmarked'),
@@ -143,6 +254,7 @@ class _ChatPageState extends State<ChatPage> {
 
   void _handleDelete() {
     if (widget.sessionId == null || widget.sessionId!.isEmpty) {
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('No session to delete'),
@@ -186,7 +298,9 @@ class _ChatPageState extends State<ChatPage> {
                 context.read<SessionBloc>().add(
                       SessionEvent.deleteSession(id: widget.sessionId!),
                     );
+                context.go(PagePath.home);
               } else {
+                ScaffoldMessenger.of(context).clearSnackBars();
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Invalid session ID'),
@@ -206,13 +320,122 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
+  void _handleSendMessage() {
+    final message = _textController.text.trim();
+    if (message.isEmpty || _isSendingMessage) return;
+
+    // If no session exists, create a new one first
+    if (widget.sessionId == null || widget.sessionId!.isEmpty) {
+      setState(() {
+        _pendingMessage = message;
+        _isSendingMessage = true;
+        // Add optimistic user message to UI immediately
+        _messages = [
+          MessageEntity(
+            role: 'user',
+            content: message,
+            artifacts: const [],
+          ),
+        ];
+      });
+      _textController.clear();
+
+      // Scroll to bottom to show the new message
+      _scrollToBottom(animate: true);
+
+      context.read<SessionBloc>().add(
+            SessionEvent.createSession(
+              agentType: 'research',
+              name: message.length > 50
+                  ? '${message.substring(0, 50)}...'
+                  : message,
+            ),
+          );
+      return;
+    }
+
+    // Add optimistic user message to UI
+    setState(() {
+      _isSendingMessage = true;
+      _messages = [
+        ..._messages,
+        MessageEntity(
+          role: 'user',
+          content: message,
+          artifacts: const [],
+        ),
+      ];
+    });
+
+    // Scroll to bottom to show the new message
+    _scrollToBottom(animate: true);
+
+    // Clear the input field
+    _textController.clear();
+
+    // Send the chat message via BLoC
+    final request = ChatRequestEntity(
+      messages: [
+        ChatRequestMessageEntity(
+          role: 'user',
+          content: message,
+        ),
+      ],
+    );
+
+    context.read<SessionDetailsBloc>().add(
+          SessionDetailsEvent.sendChat(
+            sessionId: widget.sessionId!,
+            request: request,
+          ),
+        );
+  }
+
+  void _sendPendingMessage(String sessionId) {
+    if (_pendingMessage == null) return;
+
+    final message = _pendingMessage!;
+    _pendingMessage = null;
+
+    // User message is already in the _messages list from _handleSendMessage
+    // Just send the chat message via BLoC
+    final request = ChatRequestEntity(
+      messages: [
+        ChatRequestMessageEntity(
+          role: 'user',
+          content: message,
+        ),
+      ],
+    );
+
+    context.read<SessionDetailsBloc>().add(
+          SessionDetailsEvent.sendChat(
+            sessionId: sessionId,
+            request: request,
+          ),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<SessionBloc, SessionState>(
       listener: (context, state) {
         state.maybeWhen(
+          sessionCreated: (session) {
+            final sessionId = session.id.toString();
+
+            // DON'T navigate - just update sessionId in place
+            // This prevents widget recreation and preserves optimistic UI
+            widget.sessionId = sessionId;
+
+            // Send the pending message if exists
+            if (_pendingMessage != null) {
+              _sendPendingMessage(sessionId);
+            }
+          },
           sessionDeleted: () {
             // Show success message
+            ScaffoldMessenger.of(context).clearSnackBars();
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Session deleted successfully'),
@@ -224,6 +447,11 @@ class _ChatPageState extends State<ChatPage> {
             context.go('/');
           },
           error: (failure) {
+            setState(() {
+              _isSendingMessage = false;
+              _pendingMessage = null;
+            });
+            ScaffoldMessenger.of(context).clearSnackBars();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content:
@@ -253,67 +481,101 @@ class _ChatPageState extends State<ChatPage> {
                   listener: (context, state) {
                     state.maybeWhen(
                       error: (failure) {
+                        setState(() {
+                          _isSendingMessage = false;
+                        });
+                        ScaffoldMessenger.of(context).clearSnackBars();
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(
                                 failure.errorMessage ?? 'An error occurred'),
                             backgroundColor: Colors.red,
+                            behavior: SnackBarBehavior.floating,
                           ),
                         );
+                      },
+                      chatSent: (response) {
+                        // Don't set _isSendingMessage = false here
+                        // Wait for messagesLoaded with actual messages
+                      },
+                      messagesLoaded: (messagesResponse) {
+                        setState(() {
+                          // Preserve optimistic UI while waiting for chat response
+                          if (_isSendingMessage &&
+                              messagesResponse.messages.isEmpty) {
+                            return;
+                          }
+
+                          _messages = messagesResponse.messages;
+                          _isSendingMessage = false;
+                        });
+
+                        // Update URL silently after we have real messages (without rebuilding widget)
+                        if (messagesResponse.messages.isNotEmpty &&
+                            widget.sessionId != null) {
+                          final currentUri =
+                              GoRouterState.of(context).uri.toString();
+                          final expectedUri = '/?id=${widget.sessionId}';
+
+                          // Only update URL if it doesn't match (to avoid loops)
+                          if (currentUri != expectedUri) {
+                            context.replace(expectedUri);
+                          }
+                        }
+
+                        if (messagesResponse.messages.isNotEmpty) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            _scrollToBottom(animate: true);
+                          });
+                        }
+                      },
+                      sourcesLoaded: (sourcesResponse) {
+                        setState(() {
+                          _sources = sourcesResponse.sources;
+                        });
+                      },
+                      artifactsLoaded: (artifactsResponse) {
+                        setState(() {
+                          _artifacts = artifactsResponse.artifacts;
+                        });
                       },
                       orElse: () {},
                     );
                   },
                   builder: (context, state) {
+                    // PRIORITY: Always show chat content if we have messages or are sending
+                    if (_messages.isNotEmpty || _isSendingMessage) {
+                      return _buildChatContent();
+                    }
+
+                    // Then check bloc state
                     return state.maybeWhen(
                       loading: () {
-                        if (_messages.isEmpty) {
-                          return const Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                            ),
-                          );
-                        }
-                        return _buildChatContent();
+                        return const Center(
+                          child: CircularProgressIndicator(color: Colors.white),
+                        );
                       },
-                      messagesLoaded: (messagesResponse) {
-                        _messages = messagesResponse.messages;
-                        if (_messages.isEmpty) {
-                          return _buildEmptyChatContent();
-                        }
-                        return _buildChatContent();
-                      },
-                      sourcesLoaded: (sourcesResponse) {
-                        _sources = sourcesResponse.sources;
-                        if (_messages.isEmpty) {
-                          return _buildEmptyChatContent();
-                        }
-                        return _buildChatContent();
-                      },
-                      artifactsLoaded: (artifactsResponse) {
-                        _artifacts = artifactsResponse.artifacts;
-                        if (_messages.isEmpty) {
-                          return _buildEmptyChatContent();
-                        }
-                        return _buildChatContent();
-                      },
+                      initial: () => _buildEmptyChatContent(),
+                      messagesLoaded: (_) => _buildEmptyChatContent(),
+                      sourcesLoaded: (_) => _buildEmptyChatContent(),
+                      artifactsLoaded: (_) => _buildEmptyChatContent(),
                       orElse: () {
-                        if (_messages.isNotEmpty) {
-                          return _buildChatContent();
-                        }
                         return widget.sessionId == null
                             ? _buildEmptyChatContent()
                             : const Center(
                                 child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                ),
+                                    color: Colors.white),
                               );
                       },
                     );
                   },
                 ),
               ),
-              ChatInputBar(textController: _textController),
+              ChatInputBar(
+                textController: _textController,
+                onSend: _handleSendMessage,
+                isLoading: _isSendingMessage,
+              ),
             ],
           ),
         ),
@@ -342,41 +604,121 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget _buildChatContent() {
-    return ListView.builder(
-      controller: _scrollController,
-      padding: EdgeInsets.all(16.w),
-      itemCount: _messages.length,
-      itemBuilder: (context, index) {
-        return MessageBubble(
-          message: _messages[index],
-          index: index,
-          sources: _sources,
-          ttsHelper: _ttsHelper,
-          playingMessageIndex: _playingMessageIndex,
-          onPlayingChanged: (playing) {
-            setState(() {
-              _playingMessageIndex = playing;
-            });
+    return Stack(
+      children: [
+        ListView.builder(
+          controller: _scrollController,
+          padding: EdgeInsets.all(16.w),
+          itemCount: _messages.length + (_isSendingMessage ? 1 : 0),
+          itemBuilder: (context, index) {
+            // Show loading indicator as last item when sending
+            if (index == _messages.length && _isSendingMessage) {
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.h),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1E1E1E),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.auto_awesome,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 12.w),
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(12.w),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1E1E1E),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.white.withValues(alpha: 0.6)),
+                              ),
+                            ),
+                            SizedBox(width: 12.w),
+                            Text(
+                              'Thinking...',
+                              style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.6),
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            return MessageBubble(
+              message: _messages[index],
+              index: index,
+              sources: _sources,
+              ttsHelper: _ttsHelper,
+              playingMessageIndex: _playingMessageIndex,
+              onPlayingChanged: (playing) {
+                setState(() {
+                  _playingMessageIndex = playing;
+                });
+              },
+              messageFeedback: _messageFeedback,
+              copiedStates: _copiedStates,
+              onFeedbackChanged: (index, feedback) {
+                setState(() {
+                  _messageFeedback[index] = feedback;
+                });
+              },
+              onCopiedChanged: (index, copied) {
+                setState(() {
+                  _copiedStates[index] = copied;
+                });
+              },
+            );
           },
-          messageFeedback: _messageFeedback,
-          copiedStates: _copiedStates,
-          onFeedbackChanged: (index, feedback) {
-            setState(() {
-              _messageFeedback[index] = feedback;
-            });
-          },
-          onCopiedChanged: (index, copied) {
-            setState(() {
-              _copiedStates[index] = copied;
-            });
-          },
-        );
-      },
+        ),
+        // Floating scroll to bottom button
+        if (_showScrollToBottom)
+          Align(
+            alignment: Alignment.bottomCenter,
+            // bottom: 20.h,
+            child: FloatingActionButton(
+              mini: true,
+              backgroundColor: const Color(0xFF1E1E1E),
+              onPressed: () => _scrollToBottom(),
+              child: const Icon(
+                Icons.arrow_downward,
+                color: Colors.white,
+                size: 20,
+              ),
+            ),
+          ),
+      ],
     );
   }
 
   @override
   void dispose() {
+    // _stopPolling();
     _textController.dispose();
     _scrollController.dispose();
     _ttsHelper.stop();

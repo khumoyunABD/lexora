@@ -14,20 +14,20 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
   final GetSessionsUseCase getSessionsUseCase;
   final GetSessionByIdUseCase getSessionByIdUseCase;
   final CreateSessionUseCase createSessionUseCase;
-  final UpdateSessionUseCase updateSessionUseCase;
+  final UpdateSessionNameUseCase updateSessionNameUseCase;
   final DeleteSessionUseCase deleteSessionUseCase;
 
   SessionBloc({
     required this.getSessionsUseCase,
     required this.getSessionByIdUseCase,
     required this.createSessionUseCase,
-    required this.updateSessionUseCase,
+    required this.updateSessionNameUseCase,
     required this.deleteSessionUseCase,
   }) : super(const SessionState.initial()) {
     on<GetSessionsEvent>(_onGetSessions);
     on<GetSessionByIdEvent>(_onGetSessionById);
     on<CreateSessionEvent>(_onCreateSession);
-    on<UpdateSessionEvent>(_onUpdateSession);
+    on<UpdateSessionNameEvent>(_onUpdateSessionName);
     on<DeleteSessionEvent>(_onDeleteSession);
   }
 
@@ -74,8 +74,8 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
   ) async {
     emit(const SessionState.loading());
     final params = CreateSessionParams(
-      title: event.title,
-      description: event.description,
+      agentType: event.agentType,
+      name: event.name,
     );
     final result = await createSessionUseCase(params);
     result.fold(
@@ -90,18 +90,16 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
     );
   }
 
-  Future<void> _onUpdateSession(
-    UpdateSessionEvent event,
+  Future<void> _onUpdateSessionName(
+    UpdateSessionNameEvent event,
     Emitter<SessionState> emit,
   ) async {
     emit(const SessionState.loading());
-    final params = UpdateSessionParams(
+    final params = UpdateSessionNameParams(
       id: event.id,
-      title: event.title,
-      description: event.description,
-      status: event.status,
+      name: event.name,
     );
-    final result = await updateSessionUseCase(params);
+    final result = await updateSessionNameUseCase(params);
     result.fold(
       (failure) {
         log('Failed to update session ${event.id}: ${failure.errorMessage}');

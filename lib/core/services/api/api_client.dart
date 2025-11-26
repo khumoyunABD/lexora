@@ -14,7 +14,7 @@ class ApiClient {
       baseUrl: 'https://api.lexora.uz/api/v1/',
       //baseUrl: 'http://localhost:8008/api/v1/',
       connectTimeout: const Duration(milliseconds: 10000),
-      receiveTimeout: const Duration(milliseconds: 10000),
+      receiveTimeout: const Duration(minutes: 2),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
