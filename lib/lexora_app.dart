@@ -35,11 +35,13 @@ class LexoraApp extends StatelessWidget {
             theme: ThemeData(
               scaffoldBackgroundColor: AppColors.background,
               textTheme: GoogleFonts.manropeTextTheme(),
+              useMaterial3: true,
               colorScheme: const ColorScheme.dark(
                 surface: AppColors.surface,
                 primary: AppColors.textPrimary,
               ),
-              useMaterial3: true,
+              snackBarTheme:
+                  const SnackBarThemeData(behavior: SnackBarBehavior.floating),
             ),
             routerConfig: appRouter.goRouter,
           );

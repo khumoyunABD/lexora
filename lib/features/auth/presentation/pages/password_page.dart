@@ -9,24 +9,22 @@ import 'package:lexora/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:lexora/features/auth/presentation/bloc/auth_event.dart';
 import 'package:lexora/features/auth/presentation/bloc/auth_state.dart';
 import 'package:lexora/widgets/custom_text_field.dart';
-import 'package:lexora/widgets/divider_with_text.dart';
 import 'package:lexora/widgets/password_field.dart';
 import 'package:lexora/widgets/primary_button.dart';
-import 'package:lexora/widgets/secondary_button.dart';
 
-class PasswordScreen extends StatefulWidget {
+class PasswordPage extends StatefulWidget {
   final String email;
 
-  const PasswordScreen({
+  const PasswordPage({
     super.key,
     required this.email,
   });
 
   @override
-  State<PasswordScreen> createState() => _PasswordScreenState();
+  State<PasswordPage> createState() => _PasswordPageState();
 }
 
-class _PasswordScreenState extends State<PasswordScreen> {
+class _PasswordPageState extends State<PasswordPage> {
   final _passwordController = TextEditingController();
 
   @override
@@ -38,7 +36,9 @@ class _PasswordScreenState extends State<PasswordScreen> {
   void _handleContinue() {
     if (_passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter your password')),
+        const SnackBar(
+          content: Text('Please enter your password'),
+        ),
       );
       return;
     }
@@ -53,7 +53,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
   }
 
   void _handleEditEmail() {
-    context.go('/login');
+    context.go('/login?email=${Uri.encodeComponent(widget.email)}');
   }
 
   void _showErrorSnackBar(String message) {
@@ -153,7 +153,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                         CustomTextField(
                           labelText: 'Email',
                           controller: TextEditingController(text: widget.email),
-                          enabled: false,
+                          enabled: true,
                           onEditPressed: _handleEditEmail,
                         ),
 
@@ -176,65 +176,65 @@ class _PasswordScreenState extends State<PasswordScreen> {
                         const SizedBox(height: 16),
 
                         // Forgot Password Link
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: () {
-                              // Handle forgot password
-                            },
-                            child: const Text(
-                              'Forgot password?',
-                              style: AppTextStyles.link,
-                            ),
-                          ),
-                        ),
+                        // Align(
+                        //   alignment: Alignment.centerRight,
+                        //   child: TextButton(
+                        //     onPressed: () {
+                        //       // Handle forgot password
+                        //     },
+                        //     child: const Text(
+                        //       'Forgot password?',
+                        //       style: AppTextStyles.link,
+                        //     ),
+                        //   ),
+                        // ),
 
-                        const SizedBox(height: 24),
+                        // const SizedBox(height: 24),
 
                         // Divider
-                        const DividerWithText(),
+                        // const DividerWithText(),
 
-                        const SizedBox(height: 24),
+                        // const SizedBox(height: 24),
 
                         // Google Sign In
-                        SecondaryButton(
-                          text: 'Continue with Google',
-                          icon: Icons.g_mobiledata,
-                          onPressed: () {
-                            // Handle Google sign in
-                          },
-                        ),
+                        // SecondaryButton(
+                        //   text: 'Continue with Google',
+                        //   icon: Icons.g_mobiledata,
+                        //   onPressed: () {
+                        //     // Handle Google sign in
+                        //   },
+                        // ),
 
-                        const SizedBox(height: 24),
+                        // const SizedBox(height: 24),
                       ],
                     ),
                   ),
                 ),
 
                 // Footer - NOW OUTSIDE ScrollView, stays at bottom
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          // Open Terms of Use
-                        },
-                        child: const Text('Terms of Use',
-                            style: AppTextStyles.link),
-                      ),
-                      const Text(' · ', style: AppTextStyles.caption),
-                      TextButton(
-                        onPressed: () {
-                          // Open Privacy Policy
-                        },
-                        child: const Text('Privacy Policy',
-                            style: AppTextStyles.link),
-                      ),
-                    ],
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 24),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     children: [
+                //       TextButton(
+                //         onPressed: () {
+                //           // Open Terms of Use
+                //         },
+                //         child: const Text('Terms of Use',
+                //             style: AppTextStyles.link),
+                //       ),
+                //       const Text(' · ', style: AppTextStyles.caption),
+                //       TextButton(
+                //         onPressed: () {
+                //           // Open Privacy Policy
+                //         },
+                //         child: const Text('Privacy Policy',
+                //             style: AppTextStyles.link),
+                //       ),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
           ),

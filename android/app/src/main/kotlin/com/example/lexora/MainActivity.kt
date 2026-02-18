@@ -1,4 +1,4 @@
-package com.example.lexora
+package com.kaiki.lexora
 
 import io.flutter.embedding.android.FlutterActivity
 
