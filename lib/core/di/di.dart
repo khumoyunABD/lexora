@@ -34,7 +34,7 @@ import 'package:lexora/features/user/presentation/bloc/user_bloc.dart';
 
 final di = GetIt.I;
 
-void setupDI() {
+void setupDependencies() {
   // core
   di.registerSingleton<LocalStorageRepository>(SecureLocalStorageRepository());
   di.registerSingleton<ApiClient>(ApiClient(di<LocalStorageRepository>()));
@@ -78,7 +78,8 @@ void setupDI() {
   di.registerLazySingleton(
       () => GetSessionByIdUseCase(di<SessionRepository>()));
   di.registerLazySingleton(() => CreateSessionUseCase(di<SessionRepository>()));
-  di.registerLazySingleton(() => UpdateSessionNameUseCase(di<SessionRepository>()));
+  di.registerLazySingleton(
+      () => UpdateSessionNameUseCase(di<SessionRepository>()));
   di.registerLazySingleton(() => DeleteSessionUseCase(di<SessionRepository>()));
   di.registerLazySingleton(() => GetMessagesUseCase(di<SessionRepository>()));
   di.registerLazySingleton(() => GetSourcesUseCase(di<SessionRepository>()));

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 
@@ -35,7 +36,8 @@ class CustomTextField extends StatelessWidget {
                 onPressed: onEditPressed,
                 child: Text(
                   'Edit',
-                  style: AppTextStyles.link.copyWith(decoration: TextDecoration.none),
+                  style: AppTextStyles.link
+                      .copyWith(decoration: TextDecoration.none),
                 ),
               )
             : null,
@@ -55,7 +57,8 @@ class CustomTextField extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: AppColors.border),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
       ),
     );
   }

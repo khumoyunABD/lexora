@@ -3,6 +3,6 @@ import 'package:lexora/core/di/di.dart';
 import 'package:lexora/lexora_app.dart';
 
 void main() {
-  setupDI();
+  setupDependencies();
   runApp(const LexoraApp());
 }

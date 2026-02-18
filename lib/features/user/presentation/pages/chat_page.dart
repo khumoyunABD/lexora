@@ -220,7 +220,6 @@ class _ChatPageState extends State<ChatPage> {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          behavior: SnackBarBehavior.floating,
           content: Text('No artifacts available'),
           backgroundColor: Colors.grey,
         ),
@@ -243,7 +242,6 @@ class _ChatPageState extends State<ChatPage> {
       const SnackBar(
         content: Text('Session bookmarked'),
         backgroundColor: Colors.orange,
-        behavior: SnackBarBehavior.floating,
       ),
     );
   }
@@ -259,7 +257,6 @@ class _ChatPageState extends State<ChatPage> {
         const SnackBar(
           content: Text('No session to delete'),
           backgroundColor: Colors.red,
-          behavior: SnackBarBehavior.floating,
         ),
       );
       return;
@@ -305,7 +302,6 @@ class _ChatPageState extends State<ChatPage> {
                   const SnackBar(
                     content: Text('Invalid session ID'),
                     backgroundColor: Colors.red,
-                    behavior: SnackBarBehavior.floating,
                   ),
                 );
               }
@@ -440,7 +436,6 @@ class _ChatPageState extends State<ChatPage> {
               const SnackBar(
                 content: Text('Session deleted successfully'),
                 backgroundColor: Color(0xFF2D5F3C),
-                behavior: SnackBarBehavior.floating,
               ),
             );
             // Navigate to home
@@ -457,7 +452,6 @@ class _ChatPageState extends State<ChatPage> {
                 content:
                     Text(failure.errorMessage ?? 'Failed to delete session'),
                 backgroundColor: Colors.red,
-                behavior: SnackBarBehavior.floating,
               ),
             );
           },
@@ -484,15 +478,17 @@ class _ChatPageState extends State<ChatPage> {
                         setState(() {
                           _isSendingMessage = false;
                         });
-                        ScaffoldMessenger.of(context).clearSnackBars();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                                failure.errorMessage ?? 'An error occurred'),
-                            backgroundColor: Colors.red,
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
+
+                        /// we disabled showing errors for now, but need to enable it later
+
+                        // ScaffoldMessenger.of(context).clearSnackBars();
+                        // ScaffoldMessenger.of(context).showSnackBar(
+                        //   SnackBar(
+                        //     content: Text(
+                        //         failure.errorMessage ?? 'An error occurred'),
+                        //     backgroundColor: Colors.red,
+                        //   ),
+                        // );
                       },
                       chatSent: (response) {
                         // Don't set _isSendingMessage = false here

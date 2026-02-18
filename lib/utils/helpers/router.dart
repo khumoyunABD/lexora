@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lexora/core/di/di.dart';
 import 'package:lexora/core/services/local_storage/local_storage_repository.dart';
-import 'package:lexora/features/auth/presentation/pages/login_screen.dart';
-import 'package:lexora/features/auth/presentation/pages/password_screen.dart';
+import 'package:lexora/features/auth/presentation/pages/login_page.dart';
+import 'package:lexora/features/auth/presentation/pages/password_page.dart';
 import 'package:lexora/features/user/presentation/pages/chat_page.dart';
 
 abstract class PagePath {
@@ -96,12 +96,15 @@ class AppRouter {
     ),
     GoRoute(
       path: PagePath.login,
-      pageBuilder: (context, state) => CustomTransitionPage<void>(
-        key: state.pageKey,
-        child: const LoginScreen(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-            FadeTransition(opacity: animation, child: child),
-      ),
+      pageBuilder: (context, state) {
+        final email = state.uri.queryParameters['email'];
+        return CustomTransitionPage<void>(
+          key: state.pageKey,
+          child: LoginPage(email: email),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+              FadeTransition(opacity: animation, child: child),
+        );
+      },
     ),
     GoRoute(
       path: PagePath.auth,
@@ -109,7 +112,7 @@ class AppRouter {
         final email = state.uri.queryParameters['email'] ?? '';
         return CustomTransitionPage<void>(
           key: state.pageKey,
-          child: PasswordScreen(email: email),
+          child: PasswordPage(email: email),
           transitionsBuilder: (context, animation, secondaryAnimation, child) =>
               FadeTransition(opacity: animation, child: child),
         );

@@ -22,14 +22,30 @@ class SideDrawer extends StatefulWidget {
 
 class _SideDrawerState extends State<SideDrawer> {
   bool _isUserMenuExpanded = false;
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
+    _searchController.addListener(_onSearchChanged);
     // Fetch user info when drawer is opened
     context.read<UserBloc>().add(const UserEvent.fetchUserInfo());
     // Fetch sessions when drawer is opened
     context.read<SessionBloc>().add(const SessionEvent.getSessions());
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    setState(() {
+      _searchQuery = _searchController.text.toLowerCase();
+    });
   }
 
   @override
@@ -71,6 +87,7 @@ class _SideDrawerState extends State<SideDrawer> {
                             const SizedBox(width: 12),
                             Expanded(
                               child: TextField(
+                                controller: _searchController,
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,
@@ -84,6 +101,16 @@ class _SideDrawerState extends State<SideDrawer> {
                                   border: InputBorder.none,
                                   contentPadding:
                                       const EdgeInsets.symmetric(vertical: 16),
+                                  suffixIcon: _searchQuery.isNotEmpty
+                                      ? GestureDetector(
+                                          onTap: () => _searchController.clear(),
+                                          child: Icon(
+                                            Icons.close,
+                                            color: Colors.white.withValues(alpha: 0.6),
+                                            size: 20,
+                                          ),
+                                        )
+                                      : null,
                                 ),
                               ),
                             ),
@@ -127,11 +154,11 @@ class _SideDrawerState extends State<SideDrawer> {
                           },
                         ),
 
-                        SizedBox(height: 8.h),
-                        _buildMenuItem(
-                          icon: Icons.create_new_folder_outlined,
-                          label: 'New project',
-                        ),
+                        // SizedBox(height: 8.h),
+                        // _buildMenuItem(
+                        //   icon: Icons.create_new_folder_outlined,
+                        //   label: 'New project',
+                        // ),
                         SizedBox(height: 16.h),
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 8),
@@ -145,9 +172,19 @@ class _SideDrawerState extends State<SideDrawer> {
                             if (sessions.isEmpty) {
                               return _buildEmptyState();
                             }
+                            final filteredSessions = _searchQuery.isEmpty
+                                ? sessions
+                                : sessions
+                                    .where((session) => session.name
+                                        .toLowerCase()
+                                        .contains(_searchQuery))
+                                    .toList();
+                            if (filteredSessions.isEmpty) {
+                              return _buildNoResultsState();
+                            }
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: sessions
+                              children: filteredSessions
                                   .map((session) => _buildChatHistoryItem(
                                       session.name, session.id))
                                   .toList(),
@@ -401,6 +438,20 @@ class _SideDrawerState extends State<SideDrawer> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       child: Text(
         'No sessions yet',
+        style: TextStyle(
+          color: Colors.white.withValues(alpha: 0.5),
+          fontSize: 14,
+          fontStyle: FontStyle.italic,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNoResultsState() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      child: Text(
+        'No matching sessions',
         style: TextStyle(
           color: Colors.white.withValues(alpha: 0.5),
           fontSize: 14,

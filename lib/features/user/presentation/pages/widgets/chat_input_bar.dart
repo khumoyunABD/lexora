@@ -52,19 +52,19 @@ class _ChatInputBarState extends State<ChatInputBar> {
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: const Color(0xFF1E1E1E),
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: const Icon(
-              Icons.add,
-              color: Colors.white,
-              size: 24,
-            ),
-          ),
+          // Container(
+          //   width: 48,
+          //   height: 48,
+          //   decoration: BoxDecoration(
+          //     color: const Color(0xFF1E1E1E),
+          //     borderRadius: BorderRadius.circular(24),
+          //   ),
+          //   child: const Icon(
+          //     Icons.add,
+          //     color: Colors.white,
+          //     size: 24,
+          //   ),
+          // ),
           const SizedBox(width: 12),
           Expanded(
             child: Container(
@@ -90,7 +90,8 @@ class _ChatInputBarState extends State<ChatInputBar> {
                         fontSize: 16,
                       ),
                       decoration: InputDecoration(
-                        hintText: widget.isLoading ? 'Thinking...' : 'Ask Lexora',
+                        hintText:
+                            widget.isLoading ? 'Thinking...' : 'Ask Lexora',
                         hintStyle: TextStyle(
                           color: Colors.white.withValues(alpha: 0.4),
                           fontSize: 16,

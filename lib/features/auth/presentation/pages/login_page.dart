@@ -3,19 +3,29 @@ import 'package:go_router/go_router.dart';
 import 'package:lexora/core/constants/app_colors.dart';
 import 'package:lexora/core/constants/app_text_styles.dart';
 import 'package:lexora/widgets/custom_text_field.dart';
-import 'package:lexora/widgets/divider_with_text.dart';
 import 'package:lexora/widgets/primary_button.dart';
-import 'package:lexora/widgets/secondary_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class LoginPage extends StatefulWidget {
+  final String? email;
+
+  const LoginPage({super.key, this.email});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Pre-fill email if provided
+    if (widget.email != null && widget.email!.isNotEmpty) {
+      _emailController.text = widget.email!;
+    }
+  }
 
   @override
   void dispose() {
@@ -23,12 +33,21 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+  Future<void> _launchDemoUrl() async {
+    final uri = Uri.parse('https://lexora.uz/en/demo');
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
   void _handleContinue() {
     final email = _emailController.text.trim();
 
     if (email.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter your email')),
+        const SnackBar(
+          content: Text('Please enter your email'),
+        ),
       );
       return;
     }
@@ -36,7 +55,9 @@ class _LoginScreenState extends State<LoginScreen> {
     // Basic email validation
     if (!email.contains('@') || !email.contains('.')) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a valid email')),
+        const SnackBar(
+          content: Text('Please enter a valid email'),
+        ),
       );
       return;
     }
@@ -111,10 +132,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 40),
 
                     // Title
-                    const Text(
-                      'Log in or sign up',
-                      style: AppTextStyles.h2,
-                      textAlign: TextAlign.center,
+                    Row(
+                      children: [
+                        const SizedBox(width: 8),
+                        const Text(
+                          // 'Log in or sign up',
+                          'Log in',
+                          style: AppTextStyles.h2,
+                          textAlign: TextAlign.start,
+                        ),
+                      ],
                     ),
 
                     const SizedBox(height: 24),
@@ -135,63 +162,84 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: _handleContinue,
                     ),
 
+                    const SizedBox(height: 32),
+
+                    // Demo section
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Don't have an account?",
+                          style: AppTextStyles.caption,
+                        ),
+                        const SizedBox(width: 8),
+                        GestureDetector(
+                          onTap: _launchDemoUrl,
+                          child: const Text(
+                            'Request a Demo',
+                            style: AppTextStyles.link,
+                          ),
+                        ),
+                      ],
+                    ),
+
                     const SizedBox(height: 24),
 
                     // Divider
-                    const DividerWithText(),
+                    // const DividerWithText(),
 
-                    const SizedBox(height: 24),
+                    // const SizedBox(height: 24),
 
                     // Google Sign In
-                    SecondaryButton(
-                      text: 'Continue with Google',
-                      icon: Icons.g_mobiledata,
-                      onPressed: () {
-                        // Handle Google sign in
-                      },
-                    ),
+                    // SecondaryButton(
+                    //   text: 'Continue with Google',
+                    //   icon: Icons.g_mobiledata,
+                    //   onPressed: () {
+                    //     // Handle Google sign in
+                    //   },
+                    // ),
 
-                    const SizedBox(height: 16),
+                    // const SizedBox(height: 16),
 
                     // Phone Sign In
-                    SecondaryButton(
-                      text: 'Continue with phone',
-                      icon: Icons.phone,
-                      onPressed: () {
-                        // Handle phone sign in
-                      },
-                    ),
+                    // SecondaryButton(
+                    //   text: 'Continue with phone',
+                    //   icon: Icons.phone,
+                    //   onPressed: () {
+                    //     // Handle phone sign in
+                    //   },
+                    // ),
 
-                    const SizedBox(height: 24),
+                    // const SizedBox(height: 24),
                   ],
                 ),
               ),
             ),
 
             // Footer - NOW OUTSIDE ScrollView
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      // Open Terms of Use
-                    },
-                    child:
-                        const Text('Terms of Use', style: AppTextStyles.link),
-                  ),
-                  const Text(' · ', style: AppTextStyles.caption),
-                  TextButton(
-                    onPressed: () {
-                      // Open Privacy Policy
-                    },
-                    child:
-                        const Text('Privacy Policy', style: AppTextStyles.link),
-                  ),
-                ],
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       TextButton(
+            //         onPressed: () {
+            //           // Open Terms of Use
+            //         },
+            //         child:
+            //             const Text('Terms of Use', style: AppTextStyles.link),
+            //       ),
+            //       const Text(' · ', style: AppTextStyles.caption),
+            //       TextButton(
+            //         onPressed: () {
+            //           // Open Privacy Policy
+            //         },
+            //         child:
+            //             const Text('Privacy Policy', style: AppTextStyles.link),
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),
